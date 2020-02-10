@@ -9,13 +9,13 @@ import time
 import os
 import copy
 from PIL import Image
-from model_arch import UNet16
+from . import model_arch
 
 import torchvision.transforms.functional as TF
 
 def test_semantic_model(inputImgPath, modelPath, saveImgPath):
     num_feature_dim = 16
-    model = UNet16(num_feature_dim, pretrained=True)
+    model = model_arch.UNet16(num_feature_dim, pretrained=True)
 
     model.load_state_dict(torch.load(modelPath))
     model.eval()

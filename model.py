@@ -26,7 +26,7 @@ from IPython import display
 # from utils import load_data, generate_and_save_images, load_dummy_data, img_to_patches, patches_to_img, remove_padding, load_test_img_patches
 # from utils import gauss_kernel, _instance_norm, save_metrics
 # from loss_functions import content_loss, color_loss, texture_loss, content_loss_v2, tv_loss, total_loss_agg
-import deep_learning_marcanthia.SCRIPS.segmentation.semantic_model_testing as sem_model
+import deep_learning_marcanthia.SCRIPTS.segmentation.semantic_model_testing as sem_model
 class WESPE():
     def __init__(self, configFilePath, dummyData = False, trainMode = True, laptop = False):
         # Config file
