@@ -1,0 +1,1 @@
+from deep_learning_marcanthia.SCRIPS.segmentation import semantic_model_testing

@@ -1,0 +1,1 @@
+from .SCRIPTS.segmentation import semantic_model_testing
