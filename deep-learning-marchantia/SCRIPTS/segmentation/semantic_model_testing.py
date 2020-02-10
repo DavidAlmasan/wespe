@@ -30,9 +30,10 @@ def test_semantic_model(inputImgPath, modelPath, saveImgPath):
 
     with torch.no_grad():
         image = Image.open(inputImgPath)
-        print(image.shape)
+        print(np.asarray(image)[0][0])
+        print(np.sqrt(np.asarray(image).flatten().shape[-1]))
         image = image.convert("RGB")
-        print(image.shape)
+        print(np.asarray(image).shape)
         image = np.asarray(image, dtype=np.float32) / 255
         image = image[:, :, :3]
         
