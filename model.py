@@ -198,8 +198,8 @@ class WESPE():
             print('Testing...')
             output = self.colorDisc(self.testImg_patches, training = False).numpy()
             testFolder = os.path.join(self.curFolder, 'model_tests')
-            timeName = timeName = str(now.month) +  '-' + str(now.day) + '-' + str(now.hour) + '-' + str(now.minute) + '-' + str(now.second)
-            testFolder = os.path.join(testFolder, timeName)
+            # timeName = timeName = str(now.month) +  '-' + str(now.day) + '-' + str(now.hour) + '-' + str(now.minute) + '-' + str(now.second)
+            # testFolder = os.path.join(testFolder, timeName)
             try: os.makedirs(testFolder, exist_ok = True)
             except: pass
 
@@ -211,27 +211,8 @@ class WESPE():
             enhImgPath = os.path.join(testFolder, 'enhanced_image.png')
             print('Image path: {}'.format(enhImgPath))
             plt.savefig(enhImgPath)
-            clear_session()
 
-            # Segment original image
-            seg_folder = './deep_learning_marcanthia/SCRIPTS/segmentation'
-            rel_to_main_folder = '../../../'
-            self.relModelPath = '../semseg_model_100epochs_16fdim_unet16_bce.pt'
-            self.saveImgPath = './model_tests/images/' + timeName + 'original_segmented.png'
-            inputPath = os.path.join(rel_to_main_folder, self.relTestImgPath)
-            print(inputPath)
-            saveImgPath = os.path.join(rel_to_main_folder, self.saveImgPath)
-            sem_model.test_semantic_model(inputImgPath=inputPath,
-                                          modelPath = self.relModelPath,
-                                          saveImgPath = saveImgPath)
-
-            # Segment enhanced image
-            self.saveImgPath = './model_tests/images/' + timeName + 'enhanced_segmented.png'
-            inputPath = os.path.join(rel_to_main_folder, './model_tests/images/' + timeName + 'enhanced_image.png')
-            saveImgPath = os.path.join(rel_to_main_folder, self.saveImgPath)
-            sem_model.test_semantic_model(inputImgPath=inputPath,
-                                          modelPath = self.relModelPath,
-                                          saveImgPath = saveImgPath)
+            
 
     def test_model(self, _type, testImgPatches, crop = None, ploting = False):
         # assert testImg.shape == self.imgShape
