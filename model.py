@@ -23,9 +23,9 @@ import time
 import re
 from IPython import display
 
-# from utils import load_data, generate_and_save_images, load_dummy_data, img_to_patches, patches_to_img, remove_padding, load_test_img_patches
-# from utils import gauss_kernel, _instance_norm, save_metrics
-# from loss_functions import content_loss, color_loss, texture_loss, content_loss_v2, tv_loss, total_loss_agg
+from utils import load_data, generate_and_save_images, load_dummy_data, img_to_patches, patches_to_img, remove_padding, load_test_img_patches
+from utils import gauss_kernel, _instance_norm, save_metrics
+from loss_functions import content_loss, color_loss, texture_loss, content_loss_v2, tv_loss, total_loss_agg
 import deep_learning_marcanthia.SCRIPTS.segmentation.semantic_model_testing as sem_model
 class WESPE():
     def __init__(self, configFilePath, dummyData = False, trainMode = True, laptop = False):
@@ -61,10 +61,8 @@ class WESPE():
         if self.labelFlippingPeriod == 0:
             self.labelFlippingPeriod = None
         self.discrimNoiseSTDDEV = self.config.get('discrim_noise_stddev', 0.01)
-
         self.kSize = 9  # TODO automatically assume somehow
 
-        
         # Blur kernels  #TODO make this config
         self.kernel_size=23
         self.std = 3
@@ -139,6 +137,7 @@ class WESPE():
         # Test image
         if self.testImgPath is not None:
             print('Loading test data from test data folder')
+            self.relTestImgPath = self.testImgPath
             self.testImgPath = os.path.join(self.curFolder, self.testImgPath)
             images = list()
             for root, dirnames, filenames in os.walk(self.testImgPath):
@@ -196,18 +195,42 @@ class WESPE():
         else:
             print('Testing...')
             output = self.colorDisc(self.testImg_patches, training = False).numpy()
-            newImg = generate_and_save_images(self.G, None, self.testImg_patches, patchSize = self.patchSize, kSize = 9, ckpt_folder = self.save_ckpt_dir, test = False, type = 'MODEL_IN_TEST_MODE')
-            # newImg = generate_and_save_images(self.G, 10000, self.testImg_patches, patchSize = self.patchSize, kSize = 9)
-            # print(self.testImg.shape)
-            # self.testImg = remove_padding(self.testImg, self.patchPadding)
-            # print(self.testImg.shape)
-            # testImgPatches, cropX, cropY = img_to_patches(self.testImg, self.patchSize, padding = self.patchPadding) #coming from dataset its already padded
-            # print(testImgPatches.shape)
-            # if self.useCycleGAN:
-            #     self.test_model('CYCLEGAN', testImgPatches, crop = (cropX, cropY), ploting = True)
-            # else:
-            #     self.test_model('G', testImgPatches, crop = (cropX, cropY), ploting = True)
+            testFolder = os.path.join(self.curFolder, 'model_tests')
+            timeName = timeName = str(now.month) +  '-' + str(now.day) + '-' + str(now.hour) + '-' + str(now.minute) + '-' + str(now.second)
+            testFolder = os.path.join(testFolder, timeName)
+            try: os.mkdirs(testFolder. exist_ok = True)
+            except: pass
 
+            # Enhance image
+            predictions = model(self.testImg_patches, training=False).numpy()[:, kSize//2:-(kSize//2),kSize//2:-(kSize//2) :]
+            newImg = patches_to_img(predictions, self.patchSize, verbose = False)
+            plt.imshow(newImg[:, :, 0] * 127.5 + 127.5, cmap='gray')
+            plt.axis('off')
+            enhImgPath = os.path.join(testFolder, 'enhanced_image.png')
+            print('Image path: {}'.format(enhImgPath))
+            plt.savefig(enhImgPath)
+
+            # Segment original image
+            seg_folder = './deep_learning_marcanthia/SCRIPTS/segmentation'
+            rel_to_main_folder = '../../../'
+            self.relModelPath = '/deep_learning_marcanthia/SCRIPTS/semseg_model_100_epochs_16fdim_unet16_bce.pt'
+            self.saveImgPath = './model_tests/images/' + timeName + 'original_segmented.png'
+            inputPath = os.path.join(rel_to_main_folder, self.relTestImgPath)
+            modelPath = os.path.join(rel_to_main_folder, self.relModelPath)
+            saveImgPath = os.path.join(rel_to_main_folder, self.saveImgPath)
+            sem_model.test_semantic_model(inputImgPath=inputPath
+                                          modelPath = modelPath
+                                          saveImgPath = saveImgPath)
+
+            # Segment enhanced image
+            self.relModelPath = '/deep_learning_marcanthia/SCRIPTS/semseg_model_100_epochs_16fdim_unet16_bce.pt'
+            self.saveImgPath = './model_tests/images/' + timeName + 'enhanced_segmented.png'
+            inputPath = os.path.join(rel_to_main_folder, './model_tests/images/' + timeName + 'enhanced_image.png')
+            modelPath = os.path.join(rel_to_main_folder, self.relModelPath)
+            saveImgPath = os.path.join(rel_to_main_folder, self.saveImgPath)
+            sem_model.test_semantic_model(inputImgPath=inputPath
+                                          modelPath = modelPath
+                                          saveImgPath = saveImgPath)
 
     def test_model(self, _type, testImgPatches, crop = None, ploting = False):
         # assert testImg.shape == self.imgShape
@@ -774,13 +797,13 @@ class WESPE():
         self.checkpoint.save(file_prefix = self.checkpoint_prefix)
 
 if __name__ == "__main__":
-    sem_model.test_semantic_model()
-    # gpus = tf.config.experimental.list_physical_devices("GPU")
-    # for gpu in gpus:
-    #     tf.config.experimental.set_memory_growth(gpu, True)
-    # if len(gpus) == 0:
-    #     configPath = './config_files/laptop-wespe.config'  # CPU laptop
-    #     model = WESPE(configPath,  trainMode = False, laptop = True)
-    # else:
-    #     configPath = './config_files/wespe.config'  # GPU server
-    #     model = WESPE(configPath,  trainMode = False, laptop = False)
+    
+    gpus = tf.config.experimental.list_physical_devices("GPU")
+    for gpu in gpus:
+        tf.config.experimental.set_memory_growth(gpu, True)
+    if len(gpus) == 0:
+        configPath = './config_files/laptop-wespe.config'  # CPU laptop
+        model = WESPE(configPath,  trainMode = False, laptop = True)
+    else:
+        configPath = './config_files/wespe.config'  # GPU server
+        model = WESPE(configPath,  trainMode = False, laptop = False)
