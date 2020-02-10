@@ -15,8 +15,11 @@ import torchvision.transforms.functional as TF
 
 def test_semantic_model(inputImgPath = '../data/g1_t036_c001.png', modelPath = '../semseg_model_100epochs_16fdim_unet16_bce.pt', saveImgPath = './sem_test_result_NEW.png', verbose = 1):
     curFolder = os.path.abspath(os.path.dirname(__file__))
+    print(curFolder)
     inputImgPath = os.path.join(curFolder, inputImgPath)
+    print(modelPath, 'asdasdda')
     modelPath = os.path.join(curFolder, modelPath)
+    print(modelPath, 'aaaaa')
     saveImgPath = os.path.join(curFolder, saveImgPath)
     num_feature_dim = 16
     model = model_arch.UNet16(num_feature_dim, pretrained=True)
@@ -24,7 +27,7 @@ def test_semantic_model(inputImgPath = '../data/g1_t036_c001.png', modelPath = '
     model.load_state_dict(torch.load(modelPath))
     model.eval()
 
-    device = torch.device("cuda:0")
+    device = torch.device("cuda:1")
 
     model = model.to(device)
 

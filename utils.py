@@ -266,7 +266,7 @@ def load_dummy_data(dataset, patchSize = 100, overlap = True, kSize = 9, corrupt
     domA, domB = (np.array(domA) - 127.5 ) / 127.5, (np.array(domB) - 127.5 ) / 127.5
     return domA, domB
 
-def generate_and_save_images(model, epoch = None, test_input, patchSize = 100, kSize = 9, ckpt_folder = None, test = False, type_ = 'orig'):
+def generate_and_save_images(model, epoch = None, test_input = None, patchSize = 100, kSize = 9, ckpt_folder = None, test = False, type_ = 'orig'):
     saveFolder = os.path.join(os.path.dirname(os.path.abspath(__file__)), ckpt_folder)
     saveFolder = os.path.join(saveFolder, 'images')
     # TODO save test image and save the output from the model

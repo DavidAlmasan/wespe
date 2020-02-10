@@ -17,6 +17,7 @@ from tensorflow.keras.layers import UpSampling2D, Conv2D, Conv2DTranspose, Depth
 from tensorflow.keras.models import Sequential, Model
 from tensorflow.keras.optimizers import Adam
 from tensorflow.keras.applications.vgg19 import VGG19
+from tensorflow.keras.backend import clear_session
 import os
 from scipy import ndimage, misc
 import time
@@ -74,14 +75,15 @@ class WESPE():
         self.textDisc_optimizer = tf.keras.optimizers.Adam(self.discEta)
 
         # Logger
-        self.logFolder = os.path.join(self.curFolder, self.save_ckpt_dir)
+        self.logFolder = os.path.join(self.curFolder, 'checkpoints')
+        self.logFolder = os.path.join(self.logFolder, self.save_ckpt_dir)
         self.logFolder = os.path.join(self.logFolder, 'logs')
-        try: os.mkdirs(self.logFolder, exist_ok = True)
+        try: os.makedirs(self.logFolder, exist_ok = True)
         except: pass  # exists
         now = datetime.datetime.now()
         timeName = str(now.month) +  '-' + str(now.day) + '-' + str(now.hour) + '-' + str(now.minute) + '-' + str(now.second)
         self.logFilePath = os.path.join(self.logFolder, timeName + '.txt')
-        with open(self.logFilePath, 'a') as logFile:
+        with open(self.logFilePath, 'w') as logFile:
             logFile.write('CONFIG: \n\n\n')
             logFile.write("Batch size: " + str(self.BATCH_SIZE) + '\n')
             logFile.write('Epochs: ' + str(self.EPOCHS) + '\n')
@@ -92,7 +94,7 @@ class WESPE():
             logFile.write('Loading checkpoints from folder: ' + str(self.load_ckpt_dir) + '\n')
             logFile.write('Cyclegan used in generator: ' + str(self.useCycleGAN) + '\n')
             logFile.write('Patch size: ' + str(self.patchSize) + '\n')
-            logFile.write('Dummy data used: ', str(self.dummyData))
+            logFile.write('Dummy data used: '+ str(self.dummyData))
             logFile.write('Test image used: ' + str(self.testImgPath) + '\n')
             logFile.write(' \n LOSS PARAMETERS: \n')
             logFile.write('Content weight: ' + str(self.contentW) + '\n')
@@ -115,7 +117,7 @@ class WESPE():
 
         # Load data
         if self.dummyData is not None:
-            self.domA, self.domB = load_dummy_data(self.dummyData, self.patchSize, overlap = True, kSize = self.kSize, corrupt_types=data_corruption_types)
+            self.domA, self.domB = load_dummy_data(self.dummyData, self.patchSize, overlap = True, kSize = self.kSize, corrupt_types=self.data_corruption_types)
             
 
         else:
@@ -198,38 +200,37 @@ class WESPE():
             testFolder = os.path.join(self.curFolder, 'model_tests')
             timeName = timeName = str(now.month) +  '-' + str(now.day) + '-' + str(now.hour) + '-' + str(now.minute) + '-' + str(now.second)
             testFolder = os.path.join(testFolder, timeName)
-            try: os.mkdirs(testFolder. exist_ok = True)
+            try: os.makedirs(testFolder, exist_ok = True)
             except: pass
 
             # Enhance image
-            predictions = model(self.testImg_patches, training=False).numpy()[:, kSize//2:-(kSize//2),kSize//2:-(kSize//2) :]
+            predictions = self.G(self.testImg_patches, training=False).numpy()[:, self.kSize//2:-(self.kSize//2),self.kSize//2:-(self.kSize//2) :]
             newImg = patches_to_img(predictions, self.patchSize, verbose = False)
             plt.imshow(newImg[:, :, 0] * 127.5 + 127.5, cmap='gray')
             plt.axis('off')
             enhImgPath = os.path.join(testFolder, 'enhanced_image.png')
             print('Image path: {}'.format(enhImgPath))
             plt.savefig(enhImgPath)
+            clear_session()
 
             # Segment original image
             seg_folder = './deep_learning_marcanthia/SCRIPTS/segmentation'
             rel_to_main_folder = '../../../'
-            self.relModelPath = '/deep_learning_marcanthia/SCRIPTS/semseg_model_100_epochs_16fdim_unet16_bce.pt'
+            self.relModelPath = '../semseg_model_100epochs_16fdim_unet16_bce.pt'
             self.saveImgPath = './model_tests/images/' + timeName + 'original_segmented.png'
             inputPath = os.path.join(rel_to_main_folder, self.relTestImgPath)
-            modelPath = os.path.join(rel_to_main_folder, self.relModelPath)
+            print(inputPath)
             saveImgPath = os.path.join(rel_to_main_folder, self.saveImgPath)
-            sem_model.test_semantic_model(inputImgPath=inputPath
-                                          modelPath = modelPath
+            sem_model.test_semantic_model(inputImgPath=inputPath,
+                                          modelPath = self.relModelPath,
                                           saveImgPath = saveImgPath)
 
             # Segment enhanced image
-            self.relModelPath = '/deep_learning_marcanthia/SCRIPTS/semseg_model_100_epochs_16fdim_unet16_bce.pt'
             self.saveImgPath = './model_tests/images/' + timeName + 'enhanced_segmented.png'
             inputPath = os.path.join(rel_to_main_folder, './model_tests/images/' + timeName + 'enhanced_image.png')
-            modelPath = os.path.join(rel_to_main_folder, self.relModelPath)
             saveImgPath = os.path.join(rel_to_main_folder, self.saveImgPath)
-            sem_model.test_semantic_model(inputImgPath=inputPath
-                                          modelPath = modelPath
+            sem_model.test_semantic_model(inputImgPath=inputPath,
+                                          modelPath = self.relModelPath,
                                           saveImgPath = saveImgPath)
 
     def test_model(self, _type, testImgPatches, crop = None, ploting = False):
@@ -487,26 +488,15 @@ class WESPE():
         if self.laptop: proc = BatchNormalization(axis=-1, scale = False)(proc)
         else: proc = tfa.layers.normalizations.InstanceNormalization(axis=-1)(proc)
 
-        if self.flattenDiscriminator:
-            print('using flattenDiscriminator')
-            proc = Flatten()(proc)
-            proc = Dense(1024,
-                        kernel_initializer=RandomNormal(stddev = 0.01))(proc) , #TODO add to config, this is github code on DPED (randomnormal)
-            proc = LeakyReLU(alpha=0.2)(proc)
-            proc = Dropout(0.2)(proc)
-            proc = Dense(1,
-                        kernel_initializer=self.init,
-                        activation='sigmoid')(proc)
-        else:
-            # TODO this needs more attention
-            # need to find a meaningful output shape
-            proc = Conv2D(1,
-                         (3, 3),
-                         strides = 1,
-                         padding = 'SAME',
-                         activation = 'sigmoid',
-                         name = ('Discriminator_%s_CONV_6' %_type),
-                         kernel_initializer=self.init)(proc)
+        print('using flattenDiscriminator')
+        proc = Flatten()(proc)
+        proc = Dense(1024,
+                    kernel_initializer=RandomNormal(stddev = 0.01))(proc) , #TODO add to config, this is github code on DPED (randomnormal)
+        proc = LeakyReLU(alpha=0.2)(proc)
+        proc = Dropout(0.2)(proc)
+        proc = Dense(1,
+                    kernel_initializer=self.init,
+                    activation='sigmoid')(proc)
         return Model(inputs=image, outputs=proc, name=_type)
 
     def _get_data_shape(self):
