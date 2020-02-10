@@ -21,7 +21,7 @@ import torchvision.transforms.functional as TF
 input_img_filepath = '../data/g1_t036_c001.png'
 
 # Where is the model you want to test?
-model_filepath = './semseg_results/final_model.pt'
+model_filepath = '../semseg_model_100epochs_16fdim_unet16_bce.pt'
 
 # Where would you like to save the image?
 save_img_location = './sem_test_result.png'
