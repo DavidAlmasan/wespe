@@ -13,7 +13,11 @@ from . import model_arch
 
 import torchvision.transforms.functional as TF
 
-def test_semantic_model(inputImgPath, modelPath, saveImgPath):
+def test_semantic_model(inputImgPath = '../data/g1_t036_c001.png', modelPath = '../semseg_model_100epochs_16fdim_unet16_bce.pt', saveImgPath = './sem_test_result_NEW.png', verbose = 1):
+    curFolder = os.path.abspath(os.path.dirname(__file__))
+    inputImgPath = os.path.join(curFolder, inputImgPath)
+    modelPath = os.path.join(curFolder, modelPath)
+    saveImgPath = os.path.join(curFolder, saveImgPath)
     num_feature_dim = 16
     model = model_arch.UNet16(num_feature_dim, pretrained=True)
 
@@ -29,8 +33,6 @@ def test_semantic_model(inputImgPath, modelPath, saveImgPath):
     ])
 
     with torch.no_grad():
-        print('a')
-        return
         image = Image.open(inputImgPath)
         if verbose:
             print('Image at path {} has shape {}.'.format(inputImgPath, np.asarray(image).shape))

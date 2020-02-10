@@ -774,7 +774,7 @@ class WESPE():
         self.checkpoint.save(file_prefix = self.checkpoint_prefix)
 
 if __name__ == "__main__":
-    sem_model.test_semantic_model(None, None, None)
+    sem_model.test_semantic_model()
     # gpus = tf.config.experimental.list_physical_devices("GPU")
     # for gpu in gpus:
     #     tf.config.experimental.set_memory_growth(gpu, True)
