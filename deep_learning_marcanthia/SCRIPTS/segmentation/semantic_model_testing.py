@@ -42,7 +42,7 @@ def test_semantic_model(inputImgPath = '../data/g1_t036_c001.png', modelPath = '
         if image.shape[0] != 1024 or image.shape[1] != 1024:
             rowRem = 1024 - image.shape[0]
             colRem = 1024 - image.shape[1]
-            image = cv2.copyMakeBorder(image.copy(), rowRem, 0, colRem, 0, borderType = cv2.BORDER_REFLECT)
+            image = cv2.copyMakeBorder(image.copy(), 0, rowRem, 0, colRem, borderType = cv2.BORDER_REFLECT)
 
         print('Image converted to RGB has shape: ', np.asarray(image).shape)
         image = np.asarray(image, dtype=np.float32) / 255

@@ -125,8 +125,8 @@ class WESPE():
         else:
             domA_folder = os.path.join(self.curFolder, self.config['domA_folder'])
             domB_folder = os.path.join(self.curFolder, self.config['domB_folder'])
-            self.domA = load_data(domA_folder, self.patchSize, kSize = self.kSize, lim_ = 20)
-            self.domB = load_data(domB_folder, self.patchSize, kSize = self.kSize, lim_ = 20)
+            self.domA = load_data(domA_folder, self.patchSize, kSize = self.kSize, lim_ = None)
+            self.domB = load_data(domB_folder, self.patchSize, kSize = self.kSize, lim_ = None)
             len_ = min(self.domA.shape[0], self.domB.shape[0])
             self.domA = self.domA[:len_]
             self.domB = self.domB[:len_]
