@@ -672,7 +672,7 @@ class WESPE():
                                     self.testImg_noise, ckpt_folder = self.save_ckpt_dir,  test=True, type_ = '_noise')
         for epoch in range(epochs):
             if epoch in chckpts:
-                print('Saving model at epoch: ', epoch)
+                print('Saving model at epoch{} in file {}: '.format(epoch, self.save_checkpoint_prefix))
                 self.checkpoint.save(file_prefix = self.save_checkpoint_prefix)
                  # Produce images for the GIF as we go
             display.clear_output(wait=True)
