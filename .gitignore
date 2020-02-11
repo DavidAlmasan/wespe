@@ -1,4 +1,4 @@
-**/metrics_plots/
+./checkpoints/*/metrics_plots/
 deep_learning_marcanthia/SCRIPTS/data/
 *.tif
 *.pt
