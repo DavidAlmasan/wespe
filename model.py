@@ -178,7 +178,9 @@ class WESPE():
         self.create_models()
         
         # Checkpoints
-        self.save_checkpoint_prefix = os.path.join(self.save_ckpt_dir, 'ckpt')
+        self.save_checkpoint_prefix = os.path.join(self.curFolder, 'checkpoints')
+        self.save_checkpoint_prefix = os.path.join(self.save_checkpoint_prefix, self.save_ckpt_dir)
+        self.save_checkpoint_prefix = os.path.join(self.save_checkpoint_prefix, 'ckpt')
         self.checkpoint = tf.train.Checkpoint(g_optimizer = self.G_optimizer,
                                              f_optimizer = self.F_optimizer,
                                              colorDisc_optimizer = self.colorDisc_optimizer, 
@@ -792,4 +794,4 @@ if __name__ == "__main__":
         model = WESPE(configPath,  trainMode = False, laptop = True)
     else:
         configPath = './config_files/wespe.config'  # GPU server
-        model = WESPE(configPath,  trainMode = False, laptop = False)
+        model = WESPE(configPath,  trainMode = True, laptop = False)
