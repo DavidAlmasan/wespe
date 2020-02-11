@@ -1,0 +1,50 @@
+CONFIG: 
+
+
+Batch size: 5
+Epochs: 2
+Generator Learning Rate: 0.0001
+Discriminator Learning Rate: 0.0001
+Number of filters: 64
+Saving checkpoints to folder: synth_data_with_preloaded_weights
+Loading checkpoints from folder: synth_data_with_preloaded_weights
+Cyclegan used in generator: False
+Patch size: 100
+Dummy data used: NoneTest image used: ./test_data
+ 
+ LOSS PARAMETERS: 
+Content weight: 1.0
+Texture weight: 0.001
+Color weight: 0.001
+TV weight: 10.0
+---------------------------
+
+
+Time for epoch 1 is 113.0690016746521 sec
+Generator loss:0.011246517
+Texture disc loss:4.5952644
+Color disc loss:5.116197
+TV loss:1.09967395e-07
+Content loss: 0.02095688
+Texture discrim output w/ fake images: [[[0.1343477 ]
+  [0.09625167]
+  [0.10805172]
+  [0.1698798 ]
+  [0.08902086]]]Max and min pixel values in predictions: -0.47086558, 0.41102722
+----------------------------------
+
+
+Time for epoch 2 is 70.93110918998718 sec
+Generator loss:0.0052138553
+Texture disc loss:4.5386214
+Color disc loss:4.7776375
+TV loss:1.0412817e-07
+Content loss: 0.014529074
+Texture discrim output w/ fake images: [[[0.07833475]
+  [0.05835953]
+  [0.0657644 ]
+  [0.09581521]
+  [0.08212036]]]Max and min pixel values in predictions: -0.4475522, 0.46285677
+----------------------------------
+
+
