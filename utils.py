@@ -284,7 +284,8 @@ def generate_and_save_images(model, epoch = None, test_input = None, patchSize =
         plt.imshow(test_input[0, :, :, 0] * 127.5 + 127.5, cmap='gray')
         plt.axis('off')
         imgPath = os.path.join(saveFolder, 'test_image' + type_ + '.png')
-        plt.savefig(imgPath, bbox_inches='tight', pad_inches=0)
+        # plt.savefig(imgPath, bbox_inches='tight', pad_inches=0)
+        cv2.imwrite(imgPath, test_input[0, :, :, 0] * 127.5 + 127.5)
     else:
         # Notice `training` is set to False.
         # This is so all layers run in inference mode (batchnorm).
@@ -295,8 +296,10 @@ def generate_and_save_images(model, epoch = None, test_input = None, patchSize =
         plt.imshow(newImg[:, :, 0] * 127.5 + 127.5, cmap='gray')
         plt.axis('off')
         imgPath = os.path.join(saveFolder, 'image_at_epoch_{:04d}.png'.format(epoch))
-        print('Image path: {}'.format(imgPath))
-        plt.savefig(imgPath, bbox_inches='tight', pad_inches=0)
+        cv2.imwrite(imgPath, newImg[:, :, 0] * 127.5 + 127.5)
+        # print('Image path: {}'.format(imgPath))
+        # plt.savefig(imgPath, bbox_inches='tight', pad_inches=0)
+        
         return newImg
 
 def save_metrics(folder, name, title, metricVec):
