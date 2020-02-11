@@ -5,3 +5,4 @@ deep_learning_marcanthia/SCRIPTS/data/
 domA/
 domB/
 **/ckpt*
+**/*Loss*

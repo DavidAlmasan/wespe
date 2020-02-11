@@ -125,8 +125,8 @@ class WESPE():
         else:
             domA_folder = os.path.join(self.curFolder, self.config['domA_folder'])
             domB_folder = os.path.join(self.curFolder, self.config['domB_folder'])
-            self.domA = load_data(domA_folder, self.patchSize, kSize = self.kSize, lim_ = None)
-            self.domB = load_data(domB_folder, self.patchSize, kSize = self.kSize, lim_ = None)
+            self.domA = load_data(domA_folder, self.patchSize, kSize = self.kSize, lim_ = 30)
+            self.domB = load_data(domB_folder, self.patchSize, kSize = self.kSize, lim_ = 30)
             len_ = min(self.domA.shape[0], self.domB.shape[0])
             self.domA = self.domA[:len_]
             self.domB = self.domB[:len_]
@@ -798,4 +798,4 @@ if __name__ == "__main__":
         model = WESPE(configPath,  trainMode = False, laptop = True)
     else:
         configPath = './config_files/wespe.config'  # GPU server
-        model = WESPE(configPath,  trainMode = False, laptop = False)
+        model = WESPE(configPath,  trainMode = True, laptop = False)
