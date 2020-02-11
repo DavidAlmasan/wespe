@@ -104,10 +104,11 @@ class WESPE():
             logFile.write('TV weight: ' + str(self.tvW) + '\n')       
             logFile.write('---------------------------\n' + '\n' + '\n')
         
-        # Plotting of params 
-        self.metricsFolder = os.path.join(self.curFolder, self.save_ckpt_dir)
+        # Plotting of params
+        self.metricsFolder = os.path.join(self.curFolder, 'checkpoints') 
+        self.metricsFolder = os.path.join(self.metricsFolder, self.save_ckpt_dir)
         self.metricsFolder = os.path.join(self.metricsFolder, 'metrics_plots')
-        try: os.mkdirs(self.metricsFolder, exist_ok = True)
+        try: os.makedirs(self.metricsFolder, exist_ok = True)
         except: pass  # exists
 
         self.colorLoss_hist = []
@@ -779,7 +780,7 @@ class WESPE():
                                     kSize = 9,
                                     ckpt_folder = self.save_ckpt_dir)
 
-        self.checkpoint.save(file_prefix = self.checkpoint_prefix)
+        self.checkpoint.save(file_prefix = self.save_checkpoint_prefix)
 
 if __name__ == "__main__":
     
