@@ -1,6 +1,6 @@
 import torch
 import torch.nn as nn
-
+import cv2
 import numpy as np
 import torchvision
 from torchvision import datasets, models, transforms
@@ -34,9 +34,16 @@ def test_semantic_model(inputImgPath = '../data/g1_t036_c001.png', modelPath = '
 
     with torch.no_grad():
         image = Image.open(inputImgPath)
+        
         if verbose:
             print('Image at path {} has shape {}.'.format(inputImgPath, np.asarray(image).shape))
         image = image.convert("RGB")
+        image = np.asarray(image)
+        if image.shape[0] != 1024 or image.shape[1] != 1024:
+            rowRem = 1024 - image.shape[0]
+            colRem = 1024 - image.shape[1]
+            image = cv2.copyMakeBorder(image.copy(), rowRem, 0, colRem, 0, borderType = cv2.BORDER_CONSTANT)
+
         print('Image converted to RGB has shape: ', np.asarray(image).shape)
         image = np.asarray(image, dtype=np.float32) / 255
         image = image[:, :, :3]
