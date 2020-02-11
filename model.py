@@ -192,7 +192,10 @@ class WESPE():
         if self.load_ckpt_dir is not None:
             load_ckpt_dir = os.path.join(self.curFolder, 'checkpoints')
             self.load_ckpt_dir = os.path.join(load_ckpt_dir, self.load_ckpt_dir)
-            status = self.checkpoint.restore(tf.train.latest_checkpoint(self.load_ckpt_dir))
+            if trainMode:
+                status = self.checkpoint.restore(tf.train.latest_checkpoint(self.load_ckpt_dir))
+            else:
+                status = self.checkpoint.restore(tf.train.latest_checkpoint(self.load_ckpt_dir)).expect_partial()
             print('Restored latest checkpoint from folder {}'.format((tf.train.latest_checkpoint(self.load_ckpt_dir))))
 
 
@@ -214,11 +217,15 @@ class WESPE():
             except: pass
 
             # Enhance image
+            print('Enhancing image...')
             predictions = self.G(self.testImg_patches, training=False).numpy()[:, self.kSize//2:-(self.kSize//2),self.kSize//2:-(self.kSize//2) :]
+            print('img enhanced')
             newImg = patches_to_img(predictions, self.patchSize, verbose = False)
+            print('a')
             plt.imshow(newImg[:, :, 0] * 127.5 + 127.5, cmap='gray')
             plt.axis('off')
             enhImgPath = os.path.join(testFolder, 'enhanced_image.png')
+            print('b')
             cv2.imwrite(enhImgPath, newImg[:, :, 0])
             
 
@@ -793,4 +800,4 @@ if __name__ == "__main__":
         model = WESPE(configPath,  trainMode = False, laptop = True)
     else:
         configPath = './config_files/wespe.config'  # GPU server
-        model = WESPE(configPath,  trainMode = True, laptop = False)
+        model = WESPE(configPath,  trainMode = False, laptop = False)
