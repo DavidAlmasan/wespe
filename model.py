@@ -123,8 +123,12 @@ class WESPE():
         else:
             domA_folder = os.path.join(self.curFolder, self.config['domA_folder'])
             domB_folder = os.path.join(self.curFolder, self.config['domB_folder'])
-            self.domA = load_data(domA_folder, self.patchSize, kSize = self.kSize)
-            self.domB = load_data(domB_folder, self.patchSize, kSize = self.kSize)
+            self.domA = load_data(domA_folder, self.patchSize, kSize = self.kSize, lim_ = 20)
+            self.domB = load_data(domB_folder, self.patchSize, kSize = self.kSize, lim_ = 20)
+            len_ = min(self.domA.shape[0], self.domB.shape[0])
+            self.domA = self.domA[:len_]
+            self.domB = self.domB[:len_]
+
 
         # Check data shapes
         aShape, bShape = self._get_data_shape()
@@ -209,7 +213,6 @@ class WESPE():
             plt.imshow(newImg[:, :, 0] * 127.5 + 127.5, cmap='gray')
             plt.axis('off')
             enhImgPath = os.path.join(testFolder, 'enhanced_image.png')
-            print('Image path: {}'.format(enhImgPath))
             plt.savefig(enhImgPath)
 
             
@@ -659,10 +662,11 @@ class WESPE():
         print('Saving at epochs:', chckpts)
         generate_and_save_images(self.G,
                                     1,
-                                    self.testImg_orig,  test=True, type_ = '_orig')
+                                    self.testImg_orig, ckpt_folder = self.save_ckpt_dir,  test=True, type_ = '_orig')
         generate_and_save_images(self.G,
                                     1,
-                                    self.testImg_noise,  test=True, type_ = '_noise')
+                                    self.testImg_noise, ckpt_folder = self.save_ckpt_dir,  test=True, type_ = '_noise')
+        return
         for epoch in range(epochs):
             if epoch in chckpts:
                 print('Saving model at epoch: ', epoch)
@@ -777,4 +781,4 @@ if __name__ == "__main__":
         model = WESPE(configPath,  trainMode = False, laptop = True)
     else:
         configPath = './config_files/wespe.config'  # GPU server
-        model = WESPE(configPath,  trainMode = False, laptop = False)
+        model = WESPE(configPath,  trainMode = True, laptop = False)

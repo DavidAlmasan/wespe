@@ -170,7 +170,7 @@ def patches_to_img(patches, patchSize, crop = None, padding = 0, verbose = False
         return newImg[:-crop[0], :-crop[1], :]
     return newImg    
 
-def load_data(folder, patchSize = 100, verbose = False, kSize = 9):
+def load_data(folder, patchSize = 100, verbose = False, kSize = 9, lim_ = None):
     images = list()
     for root, dirnames, filenames in os.walk(folder):
         for filename in filenames:
@@ -181,11 +181,15 @@ def load_data(folder, patchSize = 100, verbose = False, kSize = 9):
                 # image = (image - 127.5 ) / 127.5
                 images.append(image)
     data = list()
-    for image in images:         
+    for image in images:
+        if lim_ == 0:
+            break         
         greyImg = rgb2grey(image)  
         greyImg = cv2.copyMakeBorder(greyImg.copy(), kSize//2, kSize//2, kSize//2, kSize//2, borderType = cv2.BORDER_REFLECT)    
         if len(greyImg.shape) == 2: greyImg = np.expand_dims(greyImg, axis = -1)
         data.append(greyImg)
+        if lim_ is not None:
+            lim_ -= 1
 
     img1 = np.expand_dims(np.array(data.pop(0)), axis = 0)
     patches = tf.image.extract_patches(images=img1,
@@ -193,6 +197,7 @@ def load_data(folder, patchSize = 100, verbose = False, kSize = 9):
                                     strides=[1, patchSize, patchSize, 1],
                                     rates=[1, 1, 1, 1],
                                     padding='VALID').numpy().reshape((-1, patchSize + kSize - 1, patchSize + kSize - 1, 1))
+    print('in load data:', patches.shape)
     for img in data:
         newPatches = tf.image.extract_patches(images=np.expand_dims(img, axis = 0),
                                         sizes=[1, patchSize + kSize - 1, patchSize + kSize - 1, 1],
@@ -267,10 +272,11 @@ def load_dummy_data(dataset, patchSize = 100, overlap = True, kSize = 9, corrupt
     return domA, domB
 
 def generate_and_save_images(model, epoch = None, test_input = None, patchSize = 100, kSize = 9, ckpt_folder = None, test = False, type_ = 'orig'):
-    saveFolder = os.path.join(os.path.dirname(os.path.abspath(__file__)), ckpt_folder)
+    saveFolder = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'checkpoints')
+    saveFolder = os.path.join(saveFolder, ckpt_folder)
     saveFolder = os.path.join(saveFolder, 'images')
     # TODO save test image and save the output from the model
-    try: os.mkdir(saveFolder, exist_ok = True)
+    try: os.makedirs(saveFolder, exist_ok = True)
     except:pass
 
     fig = plt.figure()

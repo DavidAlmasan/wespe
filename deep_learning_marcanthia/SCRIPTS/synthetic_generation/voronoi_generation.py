@@ -18,14 +18,14 @@ seed = 1234
 np.random.seed(seed)
 
 # Size of image to generate
-img_height = 200
-img_width = 200
+img_height = 1024
+img_width = 1024
 
 # Number of cells in each image
-number_of_cells = 100
+number_of_cells = 600
 
 # The number of images to be generated
-number_images = 400
+number_images = 500
 
 # Filepath for the images to be saved, relative to the location of this file.
 # The ground truth images will be labelled ###_sem_gt.png, and the grayscale content images will be labelled ###_gray.png.

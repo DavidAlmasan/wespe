@@ -1,5 +1,5 @@
 from __future__ import print_function
-
+import os
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
@@ -29,13 +29,13 @@ import glob
 style_img_filepath = 'g2_t017_c001_cropped2.png'
 
 # Sorted list of content images (the voronoi diagrams). Where have you saved the synthetic images? '*' means that any value can be present here.
-content_imgs_filepath = sorted(glob.glob('../data/synthesized_imgs/*_gray.png'))
+content_imgs_filepath = sorted(glob.glob('../data/domB/*_gray.png'))
 
 # Path to save newly synthesized images. These images will be saved in the form ###_synth.png
-synthesized_imgs_filepath = '../data/synthesized_imgs'
+synthesized_imgs_filepath = '../data/domA'
 
 # Desired size of output image (should be same as voronoi diagram size)
-output_img_size = 128
+output_img_size = 1024
 
 # Various parameters for the neural style transfer - can modify if you would like to experiment
 style_weight = 100000
@@ -179,7 +179,6 @@ def run_style_transfer(cnn, normalization_mean, normalization_std,
     print('Optimizing..')
     run = [0]
     while run[0] <= num_steps:
-
         def closure():
             # correct the values of updated input image
             input_img.data.clamp_(0, 1)
@@ -252,7 +251,7 @@ for i, content_img in enumerate(content_list):
 
     input_img = content_img.clone()
 
-    output = run_style_transfer(cnn, cnn_normalization_mean, cnn_normalization_std, content_img, style_img, input_img, style_weight, content_weight, num_steps)
+    output = run_style_transfer(cnn, cnn_normalization_mean, cnn_normalization_std, content_img, style_img, input_img, num_iterations, style_weight, content_weight)
 
     torchvision.utils.save_image(output, os.path.join(synthesized_imgs_filepath, '{:03d}_synth.png'.format(i)))
 
