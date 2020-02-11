@@ -742,11 +742,16 @@ class WESPE():
                 print('------------')
                 # Saving images of metrics
                 imgName = 'epoch_' + str(epoch * (self.genEpochs + self.discrimEpochs) + i) 
-                save_metrics(self.metricsFolder, imgName, 'Content_Loss', self.colorLoss_hist.append(cont_loss.numpy()))
-                save_metrics(self.metricsFolder, imgName, 'Texture_Loss', self.colorLoss_hist.append(text_loss.numpy()))
-                save_metrics(self.metricsFolder, imgName, 'Color_Loss', self.colorLoss_hist.append(col_loss.numpy()))
-                save_metrics(self.metricsFolder, imgName, 'TV_Loss', self.colorLoss_hist.append(TV_loss.numpy()))
-                save_metrics(self.metricsFolder, imgName, 'Total_Loss', self.colorLoss_hist.append(gen_loss.numpy()))
+                self.contentLoss_hist.append(cont_loss.numpy())
+                self.textLoss_hist.append(text_loss.numpy())
+                self.colorLoss_hist.append(col_loss.numpy())
+                self.tvLoss_hist.append(TV_loss.numpy())
+                self.totalLoss_hist.append(gen_loss.numpy())
+                save_metrics(self.metricsFolder, imgName, 'Content_Loss', self.colorLoss_hist)
+                save_metrics(self.metricsFolder, imgName, 'Texture_Loss', self.textLoss_hist)
+                save_metrics(self.metricsFolder, imgName, 'Color_Loss', self.colorLoss_hist)
+                save_metrics(self.metricsFolder, imgName, 'TV_Loss', self.tvLoss_hist)
+                save_metrics(self.metricsFolder, imgName, 'Total_Loss', self.totalLoss_hist)
                 
 
             print('Logging data')
