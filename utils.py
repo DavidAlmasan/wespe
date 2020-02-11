@@ -289,8 +289,9 @@ def generate_and_save_images(model, epoch = None, test_input = None, patchSize =
     else:
         # Notice `training` is set to False.
         # This is so all layers run in inference mode (batchnorm).
+        print('Generating enhanced image...')
         predictions = model(test_input, training=False).numpy()[:, kSize//2:-(kSize//2),kSize//2:-(kSize//2) :]
-        # print('Predictions shape: ', predictions.shape)
+        print('Predictions shape: ', predictions.shape)
         newImg = patches_to_img(predictions, patchSize, verbose = False)
         # print('Output image pixel values (zero mean)', np.unique(newImg))
         plt.imshow(newImg[:, :, 0] * 127.5 + 127.5, cmap='gray')

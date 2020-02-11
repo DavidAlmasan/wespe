@@ -113,7 +113,7 @@ class WESPE():
         self.colorLoss_hist = []
         self.textLoss_hist = []
         self.contentLoss_hist = []
-        self.totLoss_hist = []
+        self.tvLoss_hist = []
         self.totalLoss_hist = []
 
         # Load data
@@ -187,6 +187,8 @@ class WESPE():
                                              textDisc = self.textDisc,
                                              colorDisc = self.colorDisc)
         if self.load_ckpt_dir is not None:
+            load_ckpt_dir = os.path.join(self.curFolder, 'checkpoints')
+            self.load_ckpt_dir = os.path.join(load_ckpt_dir, self.load_ckpt_dir)
             status = self.checkpoint.restore(tf.train.latest_checkpoint(self.load_ckpt_dir))
             print('Restored latest checkpoint from folder {}'.format((tf.train.latest_checkpoint(self.load_ckpt_dir))))
 
@@ -261,8 +263,8 @@ class WESPE():
                           padding = 'SAME',
                           name = ('ResBlock_%d_CONV_1' %num),
                           kernel_initializer=self.init)(featuresIn)
-            if self.laptop: temp = BatchNormalization(axis=-1, scale = False)(temp)
-            else: temp = tfa.layers.normalizations.InstanceNormalization(axis=-1)(temp)
+            #if self.laptop: temp = BatchNormalization(axis=-1, scale = False)(temp)
+            #else: temp = tfa.layers.normalizations.InstanceNormalization(axis=-1)(temp)
 
             # temp = LeakyReLU(alpha=0.2)(temp)
             temp = ReLU()(temp)
@@ -273,8 +275,8 @@ class WESPE():
                           padding = 'SAME',
                           name = ('ResBlock_%d_CONV_2' %num),
                           kernel_initializer=self.init)(temp)
-            if self.laptop: temp = BatchNormalization(axis=-1, scale = False)(temp)
-            else: temp = tfa.layers.normalizations.InstanceNormalization(axis=-1)(temp)
+            #if self.laptop: temp = BatchNormalization(axis=-1, scale = False)(temp)
+            #else: temp = tfa.layers.normalizations.InstanceNormalization(axis=-1)(temp)
             # temp = LeakyReLU(alpha=0.2)(temp)
             temp = ReLU()(temp)
 
@@ -671,7 +673,6 @@ class WESPE():
                 self.checkpoint.save(file_prefix = self.save_checkpoint_prefix)
                  # Produce images for the GIF as we go
             display.clear_output(wait=True)
-            print('Saved model and generated first image')
             newImg = generate_and_save_images(self.G,
                                                 epoch + 1,
                                                 self.testImg_patches,
@@ -699,11 +700,17 @@ class WESPE():
                 print('------------')
                 # Saving images of metrics
                 imgName = 'epoch_' + str(epoch * (self.genEpochs + self.discrimEpochs) + i) 
-                save_metrics(self.metricsFolder, imgName, 'Content_Loss', self.colorLoss_hist.append(cont_loss.numpy()))
-                save_metrics(self.metricsFolder, imgName, 'Texture_Loss', self.colorLoss_hist.append(text_loss.numpy()))
-                save_metrics(self.metricsFolder, imgName, 'Color_Loss', self.colorLoss_hist.append(col_loss.numpy()))
-                save_metrics(self.metricsFolder, imgName, 'TV_Loss', self.colorLoss_hist.append(TV_loss.numpy()))
-                save_metrics(self.metricsFolder, imgName, 'Total_Loss', self.colorLoss_hist.append(gen_loss.numpy()))
+                print(self.metricsFolder, 'aaaaa')
+                self.contentLoss_hist.append(cont_loss.numpy())
+                self.textLoss_hist.append(text_loss.numpy())
+                self.colorLoss_hist.append(col_loss.numpy())
+                self.tvLoss_hist.append(TV_loss.numpy())
+                self.totalLoss_hist.append(gen_loss.numpy())
+                save_metrics(self.metricsFolder, imgName, 'Content_Loss', self.colorLoss_hist)
+                save_metrics(self.metricsFolder, imgName, 'Texture_Loss', self.textLoss_hist)
+                save_metrics(self.metricsFolder, imgName, 'Color_Loss', self.colorLoss_hist)
+                save_metrics(self.metricsFolder, imgName, 'TV_Loss', self.tvLoss_hist)
+                save_metrics(self.metricsFolder, imgName, 'Total_Loss', self.totalLoss_hist)
 
 
             for i in range(self.discrimEpochs):
@@ -779,4 +786,4 @@ if __name__ == "__main__":
         model = WESPE(configPath,  trainMode = False, laptop = True)
     else:
         configPath = './config_files/wespe.config'  # GPU server
-        model = WESPE(configPath,  trainMode = False, laptop = False)
+        model = WESPE(configPath,  trainMode = True, laptop = False)
