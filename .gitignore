@@ -1,8 +1,7 @@
-./checkpoints/*/metrics_plots/
 deep_learning_marcanthia/SCRIPTS/data/
 *.tif
 *.pt
 domA/
 domB/
 **/ckpt*
-**/*Loss*
+*Loss.png*
