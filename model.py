@@ -23,6 +23,7 @@ from scipy import ndimage, misc
 import time
 import re
 from IPython import display
+import cv2 
 
 from utils import load_data, generate_and_save_images, load_dummy_data, img_to_patches, patches_to_img, remove_padding, load_test_img_patches
 from utils import gauss_kernel, _instance_norm, save_metrics
@@ -213,8 +214,7 @@ class WESPE():
             plt.imshow(newImg[:, :, 0] * 127.5 + 127.5, cmap='gray')
             plt.axis('off')
             enhImgPath = os.path.join(testFolder, 'enhanced_image.png')
-            plt.savefig(enhImgPath, bbox_inches='tight', pad_inches=0)
-
+            cv2.imwrite(enhImgPath, newImg[:, :, 0])
             
 
     def test_model(self, _type, testImgPatches, crop = None, ploting = False):
@@ -472,7 +472,6 @@ class WESPE():
         if self.laptop: proc = BatchNormalization(axis=-1, scale = False)(proc)
         else: proc = tfa.layers.normalizations.InstanceNormalization(axis=-1)(proc)
 
-        print('using flattenDiscriminator')
         proc = Flatten()(proc)
         proc = Dense(1024,
                     kernel_initializer=RandomNormal(stddev = 0.01))(proc) , #TODO add to config, this is github code on DPED (randomnormal)
@@ -666,13 +665,13 @@ class WESPE():
         generate_and_save_images(self.G,
                                     1,
                                     self.testImg_noise, ckpt_folder = self.save_ckpt_dir,  test=True, type_ = '_noise')
-        return
         for epoch in range(epochs):
             if epoch in chckpts:
                 print('Saving model at epoch: ', epoch)
                 self.checkpoint.save(file_prefix = self.save_checkpoint_prefix)
                  # Produce images for the GIF as we go
             display.clear_output(wait=True)
+            print('Saved model and generated first image')
             newImg = generate_and_save_images(self.G,
                                                 epoch + 1,
                                                 self.testImg_patches,
@@ -680,7 +679,6 @@ class WESPE():
                                                 kSize = 9,
                                                 ckpt_folder = self.save_ckpt_dir)
             start = time.time()
-
             # Train discriminator for self.discrimEPOCHS 
             if self.laptop: len_ = 2
             else: len_ = 100000
@@ -781,4 +779,4 @@ if __name__ == "__main__":
         model = WESPE(configPath,  trainMode = False, laptop = True)
     else:
         configPath = './config_files/wespe.config'  # GPU server
-        model = WESPE(configPath,  trainMode = True, laptop = False)
+        model = WESPE(configPath,  trainMode = False, laptop = False)
