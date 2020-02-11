@@ -221,12 +221,10 @@ class WESPE():
             predictions = self.G(self.testImg_patches, training=False).numpy()[:, self.kSize//2:-(self.kSize//2),self.kSize//2:-(self.kSize//2) :]
             print('img enhanced')
             newImg = patches_to_img(predictions, self.patchSize, verbose = False)
-            print('a')
             plt.imshow(newImg[:, :, 0] * 127.5 + 127.5, cmap='gray')
             plt.axis('off')
             enhImgPath = os.path.join(testFolder, 'enhanced_image.png')
-            print('b')
-            cv2.imwrite(enhImgPath, newImg[:, :, 0])
+            cv2.imwrite(enhImgPath, newImg[:, :, 0] * 127.5 + 127.5)
             
 
     def test_model(self, _type, testImgPatches, crop = None, ploting = False):
