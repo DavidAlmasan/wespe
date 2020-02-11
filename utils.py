@@ -296,7 +296,7 @@ def generate_and_save_images(model, epoch = None, test_input = None, patchSize =
         plt.axis('off')
         imgPath = os.path.join(saveFolder, 'image_at_epoch_{:04d}.png'.format(epoch))
         print('Image path: {}'.format(imgPath))
-        plt.savefig(imgPath)
+        plt.savefig(imgPath, bbox_inches='tight', pad_inches=0)
         return newImg
 
 def save_metrics(folder, name, title, metricVec):
