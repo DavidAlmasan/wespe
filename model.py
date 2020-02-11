@@ -703,7 +703,6 @@ class WESPE():
                 print('------------')
                 # Saving images of metrics
                 imgName = 'epoch_' + str(epoch * (self.genEpochs + self.discrimEpochs) + i) 
-                print(self.metricsFolder, 'aaaaa')
                 self.contentLoss_hist.append(cont_loss.numpy())
                 self.textLoss_hist.append(text_loss.numpy())
                 self.colorLoss_hist.append(col_loss.numpy())
@@ -794,4 +793,4 @@ if __name__ == "__main__":
         model = WESPE(configPath,  trainMode = False, laptop = True)
     else:
         configPath = './config_files/wespe.config'  # GPU server
-        model = WESPE(configPath,  trainMode = True, laptop = False)
+        model = WESPE(configPath,  trainMode = False, laptop = False)
