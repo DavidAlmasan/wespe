@@ -284,7 +284,7 @@ def generate_and_save_images(model, epoch = None, test_input = None, patchSize =
         plt.imshow(test_input[0, :, :, 0] * 127.5 + 127.5, cmap='gray')
         plt.axis('off')
         imgPath = os.path.join(saveFolder, 'test_image' + type_ + '.png')
-        plt.savefig(imgPath)
+        plt.savefig(imgPath, bbox_inches='tight', pad_inches=0)
     else:
         # Notice `training` is set to False.
         # This is so all layers run in inference mode (batchnorm).

@@ -213,7 +213,7 @@ class WESPE():
             plt.imshow(newImg[:, :, 0] * 127.5 + 127.5, cmap='gray')
             plt.axis('off')
             enhImgPath = os.path.join(testFolder, 'enhanced_image.png')
-            plt.savefig(enhImgPath)
+            plt.savefig(enhImgPath, bbox_inches='tight', pad_inches=0)
 
             
 
