@@ -64,6 +64,8 @@ class WESPE():
         if self.labelFlippingPeriod == 0:
             self.labelFlippingPeriod = None
         self.discrimNoiseSTDDEV = self.config.get('discrim_noise_stddev', 0.01)
+        self.preferGenerator = str(self.config.get('prefer_generator', False)) in ['yes', '1', 'true']
+        
         self.kSize = 9  # TODO automatically assume somehow
         self.imgShape = (self.patchSize, self.patchSize, 1)
 
@@ -728,7 +730,8 @@ class WESPE():
                 print('Training generator for minibatch {} out of {}'.format(i + 1, self.genEpochs))
                 for imageA_batch, imageB_batch, _ in zip(datasetA, datasetB, range(len_)):
                     gen_loss, text_loss, col_loss, TV_loss, cont_loss, \
-                    textDisc_fake_output_np, textDisc_real_output_np, colDisc_fake_output_np, colDisc_true_output_np  = self.train_generator_step(imageA_batch, imageB_batch)
+                    textDisc_fake_output_np, textDisc_real_output_np, colDisc_fake_output_np,\
+                         colDisc_true_output_np  = self.train_generator_step(imageA_batch, imageB_batch)
                 print("Generator loss:", gen_loss.numpy())
                 print("Texture disc loss:", text_loss.numpy())
                 print("Color disc loss:", col_loss.numpy())
@@ -736,8 +739,8 @@ class WESPE():
                 print("Content loss: ", cont_loss.numpy())
                 print("Texture discrim output w/ fake images: ", textDisc_fake_output_np.numpy()[:, :, 0])
                 print("Texture discrim output w/ real images: ", textDisc_real_output_np.numpy()[:, :, 0])
-                print("Color discrim output w/ fake images: ", textDisc_fake_output_np.numpy()[:, :, 0])
-                print("Color discrim output w/ real images: ", textDisc_real_output_np.numpy()[:, :, 0])
+                print("Color discrim output w/ fake images: ", colDisc_fake_output_np.numpy()[:, :, 0])
+                print("Color discrim output w/ real images: ", colDisc_real_output_np.numpy()[:, :, 0])
                 print('------------')
                 # Saving images of metrics
                 imgName = 'epoch_' + str(epoch * (self.genEpochs + self.discrimEpochs) + i) 
@@ -751,6 +754,39 @@ class WESPE():
                 save_metrics(self.metricsFolder, imgName, 'Color_Loss', self.colorLoss_hist)
                 save_metrics(self.metricsFolder, imgName, 'TV_Loss', self.tvLoss_hist)
                 save_metrics(self.metricsFolder, imgName, 'Total_Loss', self.totalLoss_hist)
+
+            if self.preferGenerator:
+                # If need be continue training generator until discriminator is confused again
+                text_fake_mean = np.mean(textDisc_fake_output_np.numpy().flatten())
+                text_real_mean = np.mean(textDisc_real_output_np.numpy().flatten())
+                col_fake_mean = np.mean(colDisc_fake_output_np.numpy().flatten())
+                col_real_mean = np.mean(colDisc_real_output_np.numpy().flatten())
+
+                thr = 0.4 # Difference between discrim results. Normally should be 0.5 +- (thr / 2) for fake and real
+                counter = 20
+                while np.abs(text_fake_mean - text_real_mean) > thr or np.abs(col_fake_mean - col_real_mean) > thr or counter > 0:
+                    print('Discriminator too strong. Continue training generator until condition met or for a max of 20 epochs')
+                    print('Extra generator training epoch {}...'.format(21 - counter))
+                    for imageA_batch, imageB_batch, _ in zip(datasetA, datasetB, range(len_)):
+                        gen_loss, text_loss, col_loss, TV_loss, cont_loss, \
+                        textDisc_fake_output_np, textDisc_real_output_np, colDisc_fake_output_np,\
+                            colDisc_true_output_np  = self.train_generator_step(imageA_batch, imageB_batch)
+                    print("Generator loss:", gen_loss.numpy())
+                    print("Texture disc loss:", text_loss.numpy())
+                    print("Color disc loss:", col_loss.numpy())
+                    print("TV loss:", TV_loss.numpy())
+                    print("Content loss: ", cont_loss.numpy())
+                    print("Texture discrim output w/ fake images: ", textDisc_fake_output_np.numpy()[:, :, 0])
+                    print("Texture discrim output w/ real images: ", textDisc_real_output_np.numpy()[:, :, 0])
+                    print("Color discrim output w/ fake images: ", colDisc_fake_output_np.numpy()[:, :, 0])
+                    print("Color discrim output w/ real images: ", colDisc_real_output_np.numpy()[:, :, 0])
+                    print('------------')
+                    text_fake_mean = np.mean(textDisc_fake_output_np.numpy().flatten())
+                    text_real_mean = np.mean(textDisc_real_output_np.numpy().flatten())
+                    col_fake_mean = np.mean(colDisc_fake_output_np.numpy().flatten())
+                    col_real_mean = np.mean(colDisc_real_output_np.numpy().flatten())
+                    counter -= 1
+
 
 
             for i in range(self.discrimEpochs):
@@ -831,5 +867,5 @@ if __name__ == "__main__":
         model = WESPE(configPath,  trainMode = False, laptop = True)
     else:
         configPath = './config_files/wespe.config'  # GPU server
-        model = WESPE(configPath,  trainMode = False, laptop = False)
-        #model = WESPE(configPath,  trainMode = True, laptop = False)
+        # model = WESPE(configPath,  trainMode = False, laptop = False)
+        model = WESPE(configPath,  trainMode = True, laptop = False)
