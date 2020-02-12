@@ -118,30 +118,33 @@ class WESPE():
         self.totalLoss_hist = []
 
         # Load data
-        if self.dummyData is not None:
-            self.domA, self.domB = load_dummy_data(self.dummyData, self.patchSize, overlap = True, kSize = self.kSize, corrupt_types=self.data_corruption_types)
+        if trainMode:
+            if self.dummyData is not None:
+                self.domA, self.domB = load_dummy_data(self.dummyData, self.patchSize, overlap = True, kSize = self.kSize, corrupt_types=self.data_corruption_types)
+                
+
+            else:
+                domA_folder = os.path.join(self.curFolder, self.config['domA_folder'])
+                domB_folder = os.path.join(self.curFolder, self.config['domB_folder'])
+                self.domA = load_data(domA_folder, self.patchSize, kSize = self.kSize, lim_ = 30)
+                self.domB = load_data(domB_folder, self.patchSize, kSize = self.kSize, lim_ = 30)
+                len_ = min(self.domA.shape[0], self.domB.shape[0])
+                self.domA = self.domA[:len_]
+                self.domB = self.domB[:len_]
+
+
+            # Check data shapes
+            aShape, bShape = self._get_data_shape()
+            print('Data shape: \n', aShape, bShape)
             
-
-        else:
-            domA_folder = os.path.join(self.curFolder, self.config['domA_folder'])
-            domB_folder = os.path.join(self.curFolder, self.config['domB_folder'])
-            self.domA = load_data(domA_folder, self.patchSize, kSize = self.kSize, lim_ = 30)
-            self.domB = load_data(domB_folder, self.patchSize, kSize = self.kSize, lim_ = 30)
-            len_ = min(self.domA.shape[0], self.domB.shape[0])
-            self.domA = self.domA[:len_]
-            self.domB = self.domB[:len_]
-
-
-        # Check data shapes
-        aShape, bShape = self._get_data_shape()
-        print('Data shape: \n', aShape, bShape)
-        
-        assert len(list(aShape)) == 4 and len(list(bShape)) == 4 and \
-            aShape[-1] == 1 and bShape[-1] == 1
-        self.imgShape = self.domA[0].shape
-        assert self.imgShape[0] == self.patchSize + 2 * (self.kSize // 2), self.imgShape[1] == self.patchSize + 2 * (self.kSize // 2) 
-        self.testImg_orig = np.expand_dims(self.domB[4], axis = 0)
-        self.testImg_noise = np.expand_dims(self.domA[4], axis = 0)
+            assert len(list(aShape)) == 4 and len(list(bShape)) == 4 and \
+                aShape[-1] == 1 and bShape[-1] == 1
+            self.imgShape = self.domA[0].shape
+            assert self.imgShape[0] == self.patchSize + 2 * (self.kSize // 2), self.imgShape[1] == self.patchSize + 2 * (self.kSize // 2) 
+            self.testImg_orig = np.expand_dims(self.domB[4], axis = 0)
+            self.testImg_noise = np.expand_dims(self.domA[4], axis = 0)
+            self.domA = tf.data.Dataset.from_tensor_slices(self.domA).batch(self.BATCH_SIZE, drop_remainder=True)
+            self.domB = tf.data.Dataset.from_tensor_slices(self.domB).batch(self.BATCH_SIZE, drop_remainder=True)
         # Test image
         if self.testImgPath is not None:
             print('Loading test data from test data folder')
@@ -200,10 +203,6 @@ class WESPE():
 
 
         # Train or test
-        self.domA = tf.data.Dataset.from_tensor_slices(self.domA).batch(self.BATCH_SIZE, drop_remainder=True)
-        self.domB = tf.data.Dataset.from_tensor_slices(self.domB).batch(self.BATCH_SIZE, drop_remainder=True)
-
-
         if trainMode:
             print("Training...")
             self.train(self.domA, self.domB, self.EPOCHS)
