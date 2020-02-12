@@ -281,8 +281,8 @@ def generate_and_save_images(model, epoch = None, test_input = None, patchSize =
 
     fig = plt.figure()
     if test:
-        plt.imshow(test_input[0, :, :, 0] * 127.5 + 127.5, cmap='gray')
-        plt.axis('off')
+        #plt.imshow(test_input[0, :, :, 0] * 127.5 + 127.5, cmap='gray')
+        #plt.axis('off')
         imgPath = os.path.join(saveFolder, 'test_image' + type_ + '.png')
         # plt.savefig(imgPath, bbox_inches='tight', pad_inches=0)
         cv2.imwrite(imgPath, test_input[0, :, :, 0] * 127.5 + 127.5)
@@ -294,8 +294,8 @@ def generate_and_save_images(model, epoch = None, test_input = None, patchSize =
         print('Predictions shape: ', predictions.shape)
         newImg = patches_to_img(predictions, patchSize, verbose = False)
         # print('Output image pixel values (zero mean)', np.unique(newImg))
-        plt.imshow(newImg[:, :, 0] * 127.5 + 127.5, cmap='gray')
-        plt.axis('off')
+        #plt.imshow(newImg[:, :, 0] * 127.5 + 127.5, cmap='gray')
+        #plt.axis('off')
         imgPath = os.path.join(saveFolder, 'image_at_epoch_{:04d}.png'.format(epoch))
         cv2.imwrite(imgPath, newImg[:, :, 0] * 127.5 + 127.5)
         # print('Image path: {}'.format(imgPath))
@@ -309,6 +309,7 @@ def save_metrics(folder, name, title, metricVec):
     plt.title(title)
     saveName = os.path.join(folder, name + '_' + title + '.png')
     plt.savefig(saveName, bbox_inches='tight')
+    plt.close()
 
 def plot_metrics(path):
     with open(path) as logFile:

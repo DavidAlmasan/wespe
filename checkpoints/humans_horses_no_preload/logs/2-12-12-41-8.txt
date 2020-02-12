@@ -1,0 +1,51 @@
+CONFIG: 
+
+
+Batch size: 20
+Epochs: 2
+Generator Learning Rate: 0.0001
+Discriminator Learning Rate: 1e-05
+Number of filters: 64
+Saving checkpoints to folder: humans_horses_no_preload
+Loading checkpoints from folder: None
+Cyclegan used in generator: False
+Patch size: 100
+Dummy data used: NoneTest image used: ./test_data
+ 
+ LOSS PARAMETERS: 
+Content weight: 1.0
+Texture weight: 0.002
+Color weight: 0.001
+TV weight: 20.0
+---------------------------
+
+
+Time for epoch 1 is 194.128027677536 sec
+Generator loss:0.15732804
+Texture disc loss:0.15301159
+Color disc loss:0.21950348
+TV loss:1.3806985e-07
+Content loss: 0.15785082
+Texture discrim output w/ fake images: [[[0.03386822]
+  [0.0376552 ]
+  [0.01356739]
+  [0.05086973]
+  [0.05060709]
+  [0.02421987]
+  [0.03517261]
+  [0.02278584]
+  [0.01812676]
+  [0.16969535]
+  [0.03383243]
+  [0.04921979]
+  [0.05181599]
+  [0.04045901]
+  [0.03583592]
+  [0.03707859]
+  [0.02369103]
+  [0.03067243]
+  [0.06275305]
+  [0.03132367]]]Max and min pixel values in predictions: -0.06752142, 0.00051276706
+----------------------------------
+
+

@@ -60,6 +60,7 @@ class WESPE():
         self.genEpochs = self.config.get('generator_epochs', 1)
         self.labelFlippingPeriod = int(self.config.get('label_flipping_period', None))
         self.data_corruption_types = self.config.get('data_corruption_types', ['gauss'])
+        self.labelSmoothing = str(self.config.get('label_smoothing', 'no')).lower() in ['yes', '1', 'true']
         if self.labelFlippingPeriod == 0:
             self.labelFlippingPeriod = None
         self.discrimNoiseSTDDEV = self.config.get('discrim_noise_stddev', 0.01)
