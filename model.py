@@ -574,6 +574,7 @@ class WESPE():
             # Losses
             gen_loss = content_loss_v2(domainA_imgs, reverted_images, self.inter_VGG_model)
             TV_loss = tv_loss(enhanced_images, self.imgShape)
+            
             textDisc_loss = texture_loss(tf.ones_like(textDisc_real_output), textDisc_real_output) + \
                             texture_loss(tf.zeros_like(textDisc_fake_output), textDisc_fake_output)
             colorDisc_loss = color_loss(tf.ones_like(colorDisc_real_output), colorDisc_real_output) + \
@@ -611,10 +612,25 @@ class WESPE():
             # Losses
             gen_loss = content_loss_v2(domainA_imgs, reverted_images, self.inter_VGG_model)
             TV_loss = tv_loss(enhanced_images, self.imgShape)
-            textDisc_loss = texture_loss(tf.ones_like(textDisc_real_output), textDisc_real_output) + \
-                            texture_loss(tf.zeros_like(textDisc_fake_output), textDisc_fake_output)
-            colorDisc_loss = color_loss(tf.ones_like(colorDisc_real_output), colorDisc_real_output) + \
-                             color_loss(tf.zeros_like(textDisc_fake_output), colorDisc_fake_output)
+            if self.labelSmoothing:
+                text_real_labels = tf.random_uniform(textDisc_real_output.shape,
+                                                     minval = 0.9, maxval = 1)
+                text_fake_labels = tf.random_uniform(textDisc_fake_output.shape,
+                                                     minval = 0, maxval = 0.1)
+                col_real_labels = tf.random_uniform(colorDisc_real_output.shape,
+                                                     minval = 0.9, maxval = 1)
+                col_fake_labels = tf.random_uniform(textDisc_fake_output.shape,
+                                                     minval = 0, maxval = 0.1)
+            else:
+                text_real_labels = tf.ones_like(textDisc_real_output)
+                text_fake_labels = tf.zeros_like(textDisc_fake_output)
+                col_real_labels = tf.ones_like(colorDisc_real_output)
+                col_fake_labels = tf.zeros_like(textDisc_fake_output)
+
+            textDisc_loss = texture_loss(text_real_labels, textDisc_real_output) + \
+                            texture_loss(text_fake_labels, textDisc_fake_output)
+            colorDisc_loss = color_loss(col_real_labels, colorDisc_real_output) + \
+                             color_loss(col_fake_labels, colorDisc_fake_output)
 
             total_gen_loss = self.contentW * gen_loss - \
                             self.textureW * textDisc_loss - \
@@ -647,10 +663,27 @@ class WESPE():
             # Losses
             gen_loss = content_loss_v2(domainA_imgs, reverted_images, self.inter_VGG_model)
             TV_loss = tv_loss(enhanced_images, self.imgShape)
-            textDisc_loss = texture_loss(tf.zeros_like(textDisc_real_output), textDisc_real_output) + \
-                            texture_loss(tf.ones_like(textDisc_fake_output), textDisc_fake_output)
-            colorDisc_loss = color_loss(tf.zeros_like(colorDisc_real_output), colorDisc_real_output) + \
-                             color_loss(tf.ones_like(textDisc_fake_output), colorDisc_fake_output)
+
+            if self.labelSmoothing:
+                text_real_labels = tf.random_uniform(textDisc_real_output.shape,
+                                                     minval = 0, maxval = 0.1)
+                text_fake_labels = tf.random_uniform(textDisc_fake_output.shape,
+                                                     minval = 0.9, maxval = 1)
+                col_real_labels = tf.random_uniform(colorDisc_real_output.shape,
+                                                     minval = 0, maxval = 0.1)
+                col_fake_labels = tf.random_uniform(textDisc_fake_output.shape,
+                                                     minval = 0.9, maxval = 1)
+            else:
+                text_real_labels = tf.zeros_like(textDisc_real_output)
+                text_fake_labels = tf.ones_like(textDisc_fake_output)
+                col_real_labels = tf.zeros_like(colorDisc_real_output)
+                col_fake_labels = tf.ones_like(textDisc_fake_output)
+
+            textDisc_loss = texture_loss(text_real_labels, textDisc_real_output) + \
+                            texture_loss(text_fake_labels, textDisc_fake_output)
+            colorDisc_loss = color_loss(col_real_labels, colorDisc_real_output) + \
+                             color_loss(col_fake_labels, colorDisc_fake_output)
+
 
             total_gen_loss = self.contentW * gen_loss - \
                             self.textureW * textDisc_loss - \
