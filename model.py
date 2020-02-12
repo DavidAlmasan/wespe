@@ -613,13 +613,13 @@ class WESPE():
             gen_loss = content_loss_v2(domainA_imgs, reverted_images, self.inter_VGG_model)
             TV_loss = tv_loss(enhanced_images, self.imgShape)
             if self.labelSmoothing:
-                text_real_labels = tf.random_uniform(textDisc_real_output.shape,
+                text_real_labels = tf.random.uniform(textDisc_real_output.shape,
                                                      minval = 0.9, maxval = 1)
-                text_fake_labels = tf.random_uniform(textDisc_fake_output.shape,
+                text_fake_labels = tf.random.uniform(textDisc_fake_output.shape,
                                                      minval = 0, maxval = 0.1)
-                col_real_labels = tf.random_uniform(colorDisc_real_output.shape,
+                col_real_labels = tf.random.uniform(colorDisc_real_output.shape,
                                                      minval = 0.9, maxval = 1)
-                col_fake_labels = tf.random_uniform(textDisc_fake_output.shape,
+                col_fake_labels = tf.random.uniform(textDisc_fake_output.shape,
                                                      minval = 0, maxval = 0.1)
             else:
                 text_real_labels = tf.ones_like(textDisc_real_output)
@@ -665,13 +665,13 @@ class WESPE():
             TV_loss = tv_loss(enhanced_images, self.imgShape)
 
             if self.labelSmoothing:
-                text_real_labels = tf.random_uniform(textDisc_real_output.shape,
+                text_real_labels = tf.random.uniform(textDisc_real_output.shape,
                                                      minval = 0, maxval = 0.1)
-                text_fake_labels = tf.random_uniform(textDisc_fake_output.shape,
+                text_fake_labels = tf.random.uniform(textDisc_fake_output.shape,
                                                      minval = 0.9, maxval = 1)
-                col_real_labels = tf.random_uniform(colorDisc_real_output.shape,
+                col_real_labels = tf.random.uniform(colorDisc_real_output.shape,
                                                      minval = 0, maxval = 0.1)
-                col_fake_labels = tf.random_uniform(textDisc_fake_output.shape,
+                col_fake_labels = tf.random.uniform(textDisc_fake_output.shape,
                                                      minval = 0.9, maxval = 1)
             else:
                 text_real_labels = tf.zeros_like(textDisc_real_output)
@@ -831,5 +831,5 @@ if __name__ == "__main__":
         model = WESPE(configPath,  trainMode = False, laptop = True)
     else:
         configPath = './config_files/wespe.config'  # GPU server
-        #model = WESPE(configPath,  trainMode = False, laptop = False)
-        model = WESPE(configPath,  trainMode = True, laptop = False)
+        model = WESPE(configPath,  trainMode = False, laptop = False)
+        #model = WESPE(configPath,  trainMode = True, laptop = False)
