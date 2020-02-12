@@ -64,6 +64,7 @@ class WESPE():
             self.labelFlippingPeriod = None
         self.discrimNoiseSTDDEV = self.config.get('discrim_noise_stddev', 0.01)
         self.kSize = 9  # TODO automatically assume somehow
+        self.imgShape = (self.patchSize, self.patchSize, 1)
 
         # Blur kernels  #TODO make this config
         self.kernel_size=23
@@ -218,10 +219,9 @@ class WESPE():
             # Enhance image
             print('Enhancing image...')
             predictions = self.G(self.testImg_patches, training=False).numpy()[:, self.kSize//2:-(self.kSize//2),self.kSize//2:-(self.kSize//2) :]
-            print('img enhanced')
             newImg = patches_to_img(predictions, self.patchSize, verbose = False)
-            plt.imshow(newImg[:, :, 0] * 127.5 + 127.5, cmap='gray')
-            plt.axis('off')
+            #plt.imshow(newImg[:, :, 0] * 127.5 + 127.5, cmap='gray')
+            #plt.axis('off')
             enhImgPath = os.path.join(testFolder, 'enhanced_image.png')
             cv2.imwrite(enhImgPath, newImg[:, :, 0] * 127.5 + 127.5)
             
@@ -797,5 +797,5 @@ if __name__ == "__main__":
         model = WESPE(configPath,  trainMode = False, laptop = True)
     else:
         configPath = './config_files/wespe.config'  # GPU server
-        model = WESPE(configPath,  trainMode = False, laptop = False)
-        #model = WESPE(configPath,  trainMode = True, laptop = False)
+        #model = WESPE(configPath,  trainMode = False, laptop = False)
+        model = WESPE(configPath,  trainMode = True, laptop = False)
