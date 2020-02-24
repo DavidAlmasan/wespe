@@ -160,6 +160,7 @@ class WESPE():
                     if re.search("\.(jpg|jpeg|png|bmp|tiff)$", filename):
                         filepath = os.path.join(root, filename)
                         image = imageio.imread(filepath)
+                        print(type(image), image.shape, np.unique(image))
                         if len(image.shape) == 2: image = np.expand_dims(image, axis = -1)
                         image = (image - 127.5 ) / 127.5
                         images.append(image)
@@ -868,5 +869,5 @@ if __name__ == "__main__":
         model = WESPE(configPath,  trainMode = False, laptop = True)
     else:
         configPath = './config_files/wespe.config'  # GPU server
-        model = WESPE(configPath,  trainMode = False, laptop = False)
-        #model = WESPE(configPath,  trainMode = True, laptop = False)
+        #model = WESPE(configPath,  trainMode = False, laptop = False)
+        model = WESPE(configPath,  trainMode = True, laptop = False)

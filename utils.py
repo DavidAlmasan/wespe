@@ -212,7 +212,7 @@ def load_test_img_patches(testImg, patchSize = 100, kSize = 9):
     if len(testImg.shape) == 4:
         testImg = testImg[-1]
     if testImg.shape[-1] != 1:
-        testImg = testImg[:, :, 0]
+        testImg = rgb2grey(testImg)
     testImg = cv2.copyMakeBorder(testImg.copy(), kSize//2, kSize//2, kSize//2, kSize//2, borderType = cv2.BORDER_REFLECT)    
     if len(testImg.shape) == 2: testImg = np.expand_dims(testImg, axis = -1)
     if len(testImg.shape) == 3: testImg = np.expand_dims(testImg, axis = 0)
