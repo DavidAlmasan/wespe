@@ -223,6 +223,7 @@ class WESPE():
             print('Enhancing image...')
             predictions = self.G(self.testImg_patches, training=False).numpy()[:, self.kSize//2:-(self.kSize//2),self.kSize//2:-(self.kSize//2) :]
             newImg = patches_to_img(predictions, self.patchSize, verbose = False)
+            print('min-max pixel values in enhanced image are : {}, {}'.format(min(newImg.flatten()), max(newImg.flatten())))
             #plt.imshow(newImg[:, :, 0] * 127.5 + 127.5, cmap='gray')
             #plt.axis('off')
             enhImgPath = os.path.join(testFolder, 'enhanced_image.png')
