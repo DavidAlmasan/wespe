@@ -1,0 +1,80 @@
+CONFIG: 
+
+
+Batch size: 20
+Epochs: 3
+Generator Learning Rate: 0.0001
+Discriminator Learning Rate: 1e-05
+Number of filters: 64
+Saving checkpoints to folder: humans_horses_no_preload
+Loading checkpoints from folder: None
+Cyclegan used in generator: False
+Patch size: 100
+Dummy data used: NoneTest image used: ./test_data
+ 
+ LOSS PARAMETERS: 
+Content weight: 1.0
+Texture weight: 0.002
+Color weight: 0.001
+TV weight: 20.0
+---------------------------
+
+
+Time for epoch 1 is 197.07778143882751 sec
+Generator loss:0.17981058
+Texture disc loss:0.468831
+Color disc loss:0.5424461
+TV loss:2.1239559e-07
+Content loss: 0.18128644
+Texture discrim output w/ fake images: [[[0.05842376]
+  [0.0745436 ]
+  [0.05781242]
+  [0.10739666]
+  [0.08835497]
+  [0.09262708]
+  [0.05140156]
+  [0.05631408]
+  [0.07664266]
+  [0.11101574]
+  [0.05164587]
+  [0.08290541]
+  [0.04462263]
+  [0.0654504 ]
+  [0.10371393]
+  [0.04650772]
+  [0.06656128]
+  [0.07815889]
+  [0.05891991]
+  [0.0894706 ]]]Max and min pixel values in predictions: -0.028025134, 0.04317155
+----------------------------------
+
+
+Time for epoch 2 is 664.3137199878693 sec
+Generator loss:0.045556515
+Texture disc loss:0.47735327
+Color disc loss:0.4400039
+TV loss:7.101555e-07
+Content loss: 0.046937022
+Texture discrim output w/ fake images: [[[0.07404411]
+  [0.1502001 ]
+  [0.07020161]
+  [0.04128844]
+  [0.05976203]
+  [0.0845533 ]
+  [0.07453537]
+  [0.06596103]
+  [0.07313457]
+  [0.0872725 ]
+  [0.16299602]
+  [0.07703948]
+  [0.06694755]
+  [0.08852714]
+  [0.14164352]
+  [0.08949998]
+  [0.17854291]
+  [0.11168289]
+  [0.15144473]
+  [0.08334357]]]Max and min pixel values in predictions: -0.6370857, 0.29217988
+----------------------------------
+
+

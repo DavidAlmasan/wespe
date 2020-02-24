@@ -740,7 +740,7 @@ class WESPE():
                 print("Texture discrim output w/ fake images: ", textDisc_fake_output_np.numpy()[:, :, 0])
                 print("Texture discrim output w/ real images: ", textDisc_real_output_np.numpy()[:, :, 0])
                 print("Color discrim output w/ fake images: ", colDisc_fake_output_np.numpy()[:, :, 0])
-                print("Color discrim output w/ real images: ", colDisc_real_output_np.numpy()[:, :, 0])
+                print("Color discrim output w/ real images: ", colDisc_true_output_np.numpy()[:, :, 0])
                 print('------------')
                 # Saving images of metrics
                 imgName = 'epoch_' + str(epoch * (self.genEpochs + self.discrimEpochs) + i) 
@@ -760,13 +760,12 @@ class WESPE():
                 text_fake_mean = np.mean(textDisc_fake_output_np.numpy().flatten())
                 text_real_mean = np.mean(textDisc_real_output_np.numpy().flatten())
                 col_fake_mean = np.mean(colDisc_fake_output_np.numpy().flatten())
-                col_real_mean = np.mean(colDisc_real_output_np.numpy().flatten())
+                col_real_mean = np.mean(colDisc_true_output_np.numpy().flatten())
 
                 thr = 0.4 # Difference between discrim results. Normally should be 0.5 +- (thr / 2) for fake and real
-                counter = 20
-                while np.abs(text_fake_mean - text_real_mean) > thr or np.abs(col_fake_mean - col_real_mean) > thr or counter > 0:
-                    print('Discriminator too strong. Continue training generator until condition met or for a max of 20 epochs')
-                    print('Extra generator training epoch {}...'.format(21 - counter))
+                counter = 100
+                while (abs(text_fake_mean - text_real_mean) > thr or abs(col_fake_mean - col_real_mean) > thr) and counter > 0:
+                    print('Discriminator too strong. Continue training generator until condition met or for a max of {} epochs'.format(counter))
                     for imageA_batch, imageB_batch, _ in zip(datasetA, datasetB, range(len_)):
                         gen_loss, text_loss, col_loss, TV_loss, cont_loss, \
                         textDisc_fake_output_np, textDisc_real_output_np, colDisc_fake_output_np,\
@@ -779,12 +778,13 @@ class WESPE():
                     print("Texture discrim output w/ fake images: ", textDisc_fake_output_np.numpy()[:, :, 0])
                     print("Texture discrim output w/ real images: ", textDisc_real_output_np.numpy()[:, :, 0])
                     print("Color discrim output w/ fake images: ", colDisc_fake_output_np.numpy()[:, :, 0])
-                    print("Color discrim output w/ real images: ", colDisc_real_output_np.numpy()[:, :, 0])
+                    print("Color discrim output w/ real images: ", colDisc_true_output_np.numpy()[:, :, 0])
+                    print(text_fake_mean, text_real_mean, col_fake_mean, col_real_mean)
                     print('------------')
                     text_fake_mean = np.mean(textDisc_fake_output_np.numpy().flatten())
                     text_real_mean = np.mean(textDisc_real_output_np.numpy().flatten())
                     col_fake_mean = np.mean(colDisc_fake_output_np.numpy().flatten())
-                    col_real_mean = np.mean(colDisc_real_output_np.numpy().flatten())
+                    col_real_mean = np.mean(colDisc_true_output_np.numpy().flatten())
                     counter -= 1
 
 
@@ -867,5 +867,5 @@ if __name__ == "__main__":
         model = WESPE(configPath,  trainMode = False, laptop = True)
     else:
         configPath = './config_files/wespe.config'  # GPU server
-        # model = WESPE(configPath,  trainMode = False, laptop = False)
-        model = WESPE(configPath,  trainMode = True, laptop = False)
+        model = WESPE(configPath,  trainMode = False, laptop = False)
+        #model = WESPE(configPath,  trainMode = True, laptop = False)

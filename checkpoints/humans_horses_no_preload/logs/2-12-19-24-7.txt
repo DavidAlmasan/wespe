@@ -1,0 +1,109 @@
+CONFIG: 
+
+
+Batch size: 20
+Epochs: 3
+Generator Learning Rate: 0.0001
+Discriminator Learning Rate: 1e-05
+Number of filters: 64
+Saving checkpoints to folder: humans_horses_no_preload
+Loading checkpoints from folder: None
+Cyclegan used in generator: False
+Patch size: 100
+Dummy data used: NoneTest image used: ./test_data
+ 
+ LOSS PARAMETERS: 
+Content weight: 1.0
+Texture weight: 0.002
+Color weight: 0.001
+TV weight: 20.0
+---------------------------
+
+
+Time for epoch 1 is 197.80005478858948 sec
+Generator loss:0.15953887
+Texture disc loss:0.42347294
+Color disc loss:0.5128729
+TV loss:9.243665e-08
+Content loss: 0.16089684
+Texture discrim output w/ fake images: [[[0.07862446]
+  [0.09872985]
+  [0.07189888]
+  [0.08591667]
+  [0.06921452]
+  [0.05137083]
+  [0.067105  ]
+  [0.06273857]
+  [0.08135706]
+  [0.08342218]
+  [0.15015331]
+  [0.12372568]
+  [0.13641265]
+  [0.14239258]
+  [0.09183785]
+  [0.10186893]
+  [0.07400736]
+  [0.08842313]
+  [0.06149653]
+  [0.1400736 ]]]Max and min pixel values in predictions: -0.050853364, 0.004857732
+----------------------------------
+
+
+Time for epoch 2 is 2843.9644050598145 sec
+Generator loss:0.011764494
+Texture disc loss:0.47414112
+Color disc loss:0.45036012
+TV loss:2.2105962e-06
+Content loss: 0.013118925
+Texture discrim output w/ fake images: [[[0.06907231]
+  [0.12236968]
+  [0.10023341]
+  [0.08913681]
+  [0.0683414 ]
+  [0.10195094]
+  [0.08870545]
+  [0.0802938 ]
+  [0.08406496]
+  [0.07653522]
+  [0.0881421 ]
+  [0.10715315]
+  [0.07655513]
+  [0.10746303]
+  [0.11502412]
+  [0.06292766]
+  [0.16273025]
+  [0.12699386]
+  [0.1295054 ]
+  [0.08745944]]]Max and min pixel values in predictions: -0.45593965, 0.18251146
+----------------------------------
+
+
+Time for epoch 3 is 206.22868657112122 sec
+Generator loss:0.008712295
+Texture disc loss:0.45657796
+Color disc loss:0.6387
+TV loss:3.2825187e-07
+Content loss: 0.010257587
+Texture discrim output w/ fake images: [[[0.06052446]
+  [0.07121417]
+  [0.0606221 ]
+  [0.03918719]
+  [0.03301701]
+  [0.041888  ]
+  [0.0694719 ]
+  [0.04939148]
+  [0.05734634]
+  [0.05482796]
+  [0.06865746]
+  [0.06312376]
+  [0.08507702]
+  [0.05965698]
+  [0.1116778 ]
+  [0.06390411]
+  [0.10021111]
+  [0.07857659]
+  [0.05350867]
+  [0.03890041]]]Max and min pixel values in predictions: -0.55752563, 0.6028154
+----------------------------------
+
+
