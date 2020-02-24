@@ -17,9 +17,9 @@ sem_model.test_semantic_model(inputImgPath=inputPath,
                                 saveImgPath = saveImgPath)
 
 # Segment enhanced image
-saveImgPath = './model_tests/' +  'enhanced_segmented.png'
-inputPath = os.path.join(rel_to_main_folder, './model_tests/' +  'enhanced_image.png')
-saveImgPath = os.path.join(rel_to_main_folder, saveImgPath)
-sem_model.test_semantic_model(inputImgPath=inputPath,
-                                modelPath = relModelPath,
-                                saveImgPath = saveImgPath)
+#saveImgPath = './model_tests/' +  'enhanced_segmented.png'
+#inputPath = os.path.join(rel_to_main_folder, './model_tests/' +  'enhanced_image.png')
+#saveImgPath = os.path.join(rel_to_main_folder, saveImgPath)
+#sem_model.test_semantic_model(inputImgPath=inputPath,
+#                                modelPath = relModelPath,
+#                                saveImgPath = saveImgPath)
