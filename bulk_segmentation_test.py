@@ -3,11 +3,12 @@ import deep_learning_marcanthia.SCRIPTS.segmentation.semantic_model_testing as s
 import os
 import numpy as np 
 import imageio
-
+import re
 
 curFolder = os.path.abspath(os.path.dirname(__file__))
-relImgFolder = './bulk_segmentation_images'
+relImgFolder = './images_bulk_segmentation'
 relImgSaveFolder = os.path.join(relImgFolder, 'segmented')
+os.makedirs(relImgSaveFolder, exist_ok=True)
 imgFolder = os.path.join(curFolder, relImgFolder)
 images = list()
 names = list()
@@ -26,13 +27,12 @@ rel_to_main_folder = '../../../'
 relModelPath = '../semseg_model_100epochs_16fdim_unet16_bce.pt'
 
 for img, name in zip(images, names):
-    print(name)
-    # saveImgPath = of.path.join(relImgSaveFolder, name[:-4] + '_segmented.png')
-    # relTestImgPath = os.path.join(relImgFolder, name)
+    saveImgPath = os.path.join(relImgSaveFolder, name[:-4] + '_segmented.png')
+    relTestImgPath = os.path.join(relImgFolder, name)
 
 
-    # inputPath = os.path.join(rel_to_main_folder, relTestImgPath)
-    # saveImgPath = os.path.join(rel_to_main_folder, saveImgPath)
-    # sem_model.test_semantic_model(inputImgPath=inputPath,
-    #                                 modelPath = relModelPath,
-    #                                 saveImgPath = saveImgPath)
+    inputPath = os.path.join(rel_to_main_folder, relTestImgPath)
+    saveImgPath = os.path.join(rel_to_main_folder, saveImgPath)
+    sem_model.test_semantic_model(inputImgPath=inputPath,
+                                  modelPath = relModelPath,
+                                  saveImgPath = saveImgPath)
