@@ -1,0 +1,167 @@
+CONFIG: 
+
+
+Batch size: 20
+Epochs: 5
+Generator Learning Rate: 0.0005
+Discriminator Learning Rate: 1e-05
+Number of filters: 64
+Saving checkpoints to folder: marc_data_feb25
+Loading checkpoints from folder: None
+Cyclegan used in generator: False
+Patch size: 100
+Dummy data used: NoneTest image used: ./test_data
+ 
+ LOSS PARAMETERS: 
+Content weight: 1.0
+Texture weight: 0.001
+Color weight: 0.001
+TV weight: 10.0
+---------------------------
+
+
+Time for epoch 1 is 184.61023473739624 sec
+Generator loss:0.12881447
+Texture disc loss:3.5627227
+Color disc loss:3.7852936
+TV loss:3.4146828e-07
+Content loss: 0.13615908
+Texture discrim output w/ fake images: [[[0.14759651]
+  [0.12296352]
+  [0.1480417 ]
+  [0.09902057]
+  [0.12537786]
+  [0.08279341]
+  [0.1461685 ]
+  [0.15944225]
+  [0.08736974]
+  [0.16650188]
+  [0.10128614]
+  [0.12614903]
+  [0.11938572]
+  [0.12824818]
+  [0.07263261]
+  [0.12727937]
+  [0.1583058 ]
+  [0.1445815 ]
+  [0.14569938]
+  [0.09684455]]]Max and min pixel values in predictions: -0.033175472, 0.020094186
+----------------------------------
+
+
+Time for epoch 2 is 136.80447459220886 sec
+Generator loss:0.0441653
+Texture disc loss:3.5036688
+Color disc loss:3.7770243
+TV loss:3.7125548e-07
+Content loss: 0.051442277
+Texture discrim output w/ fake images: [[[0.18978232]
+  [0.13867003]
+  [0.13732341]
+  [0.14129692]
+  [0.10649619]
+  [0.12635794]
+  [0.16435736]
+  [0.2338829 ]
+  [0.13207984]
+  [0.18172687]
+  [0.13898733]
+  [0.108787  ]
+  [0.13240898]
+  [0.12952408]
+  [0.13493475]
+  [0.16004714]
+  [0.22519001]
+  [0.1594261 ]
+  [0.19770509]
+  [0.14184982]]]Max and min pixel values in predictions: -0.5201031, 0.7933711
+----------------------------------
+
+
+Time for epoch 3 is 136.82153224945068 sec
+Generator loss:0.017790386
+Texture disc loss:3.582632
+Color disc loss:3.7153063
+TV loss:3.4772088e-07
+Content loss: 0.025084848
+Texture discrim output w/ fake images: [[[0.22920093]
+  [0.11707091]
+  [0.15675303]
+  [0.11746714]
+  [0.09816986]
+  [0.11864874]
+  [0.1010277 ]
+  [0.15698344]
+  [0.09774992]
+  [0.17032492]
+  [0.12462932]
+  [0.1285573 ]
+  [0.16139081]
+  [0.11421975]
+  [0.12959522]
+  [0.16467309]
+  [0.1164937 ]
+  [0.16649702]
+  [0.08508569]
+  [0.13797906]]]Max and min pixel values in predictions: -0.44539738, 0.78871346
+----------------------------------
+
+
+Time for epoch 4 is 136.6216938495636 sec
+Generator loss:0.049634915
+Texture disc loss:3.5466712
+Color disc loss:3.6970398
+TV loss:3.2646977e-07
+Content loss: 0.056875363
+Texture discrim output w/ fake images: [[[0.19486085]
+  [0.17666057]
+  [0.18397292]
+  [0.13972878]
+  [0.14010775]
+  [0.14977002]
+  [0.1456145 ]
+  [0.21378696]
+  [0.11960787]
+  [0.1703077 ]
+  [0.12834969]
+  [0.19783962]
+  [0.14708322]
+  [0.15748152]
+  [0.14562547]
+  [0.16737741]
+  [0.20974925]
+  [0.13811392]
+  [0.11948082]
+  [0.12145481]]]Max and min pixel values in predictions: -0.37432256, 0.7767584
+----------------------------------
+
+
+Time for epoch 5 is 137.04160356521606 sec
+Generator loss:0.06481544
+Texture disc loss:3.5112574
+Color disc loss:3.814054
+TV loss:3.1110855e-07
+Content loss: 0.07213764
+Texture discrim output w/ fake images: [[[0.19420317]
+  [0.2862963 ]
+  [0.22886476]
+  [0.17892048]
+  [0.17420653]
+  [0.25356463]
+  [0.18377492]
+  [0.30597597]
+  [0.19514859]
+  [0.20644394]
+  [0.19619492]
+  [0.24000025]
+  [0.20981964]
+  [0.20460817]
+  [0.18760377]
+  [0.24536473]
+  [0.20120609]
+  [0.18957865]
+  [0.15730375]
+  [0.21390387]]]Max and min pixel values in predictions: -0.33018926, 0.68926346
+----------------------------------
+
+
