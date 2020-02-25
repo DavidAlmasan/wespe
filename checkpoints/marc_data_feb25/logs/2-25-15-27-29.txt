@@ -1,0 +1,22 @@
+CONFIG: 
+
+
+Batch size: 20
+Epochs: 10
+Generator Learning Rate: 0.0005
+Discriminator Learning Rate: 1e-05
+Number of filters: 64
+Saving checkpoints to folder: marc_data_feb25
+Loading checkpoints from folder: None
+Cyclegan used in generator: False
+Patch size: 100
+Dummy data used: NoneTest image used: ./test_data
+ 
+ LOSS PARAMETERS: 
+Content weight: 1.0
+Texture weight: 0.001
+Color weight: 0.001
+TV weight: 100.0
+---------------------------
+
+

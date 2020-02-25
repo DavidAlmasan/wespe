@@ -1,3 +1,4 @@
+import time
 import tensorflow as tf
 import os
 from scipy import ndimage, misc
@@ -178,7 +179,6 @@ def load_data(folder, patchSize = 100, verbose = False, kSize = 9, lim_ = None):
                 filepath = os.path.join(root, filename)
                 image = imageio.imread(filepath)
                 if len(image.shape) == 2: image = np.expand_dims(image, axis = -1)
-                # image = (image - 127.5 ) / 127.5
                 images.append(image)
     data = list()
     for image in images:
@@ -190,7 +190,6 @@ def load_data(folder, patchSize = 100, verbose = False, kSize = 9, lim_ = None):
         data.append(greyImg)
         if lim_ is not None:
             lim_ -= 1
-
     img1 = np.expand_dims(np.array(data.pop(0)), axis = 0)
     patches = tf.image.extract_patches(images=img1,
                                     sizes=[1, patchSize + kSize - 1, patchSize + kSize - 1, 1],
