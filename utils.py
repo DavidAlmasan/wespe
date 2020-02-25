@@ -47,7 +47,7 @@ def rgb2grey(img):
     else: raise ValueError('not known img type')
 
 def blur_img(img):
-    return cv2.blur(img, (7, 7))
+    return cv2.blur(img, (3, 3))
 
 def noisy(noise_typ,image):
     if noise_typ == "gauss":

@@ -869,5 +869,5 @@ if __name__ == "__main__":
         model = WESPE(configPath,  trainMode = False, laptop = True)
     else:
         configPath = './config_files/wespe.config'  # GPU server
-        model = WESPE(configPath,  trainMode = False, laptop = False)
-        #model = WESPE(configPath,  trainMode = True, laptop = False)
+        #model = WESPE(configPath,  trainMode = False, laptop = False)
+        model = WESPE(configPath,  trainMode = True, laptop = False)
