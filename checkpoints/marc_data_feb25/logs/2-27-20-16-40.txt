@@ -1,0 +1,80 @@
+CONFIG: 
+
+
+Batch size: 20
+Epochs: 2
+Generator Learning Rate: 0.001
+Discriminator Learning Rate: 0.0001
+Number of filters: 64
+Saving checkpoints to folder: marc_data_feb25
+Loading checkpoints from folder: None
+Cyclegan used in generator: False
+Patch size: 100
+Dummy data used: NoneTest image used: ./test_data
+ 
+ LOSS PARAMETERS: 
+Content weight: 1.0
+Texture weight: 0.01
+Color weight: 0.001
+TV weight: 10.0
+---------------------------
+
+
+Time for epoch 1 is 183.42652559280396 sec
+Generator loss:2.513873
+Texture disc loss:4.146104
+Color disc loss:4.084209
+TV loss:0.0
+Content loss: 2.5594182
+Texture discrim output w/ fake images: [[[0.09805447]
+  [0.10266382]
+  [0.09777847]
+  [0.12024441]
+  [0.12078238]
+  [0.09300917]
+  [0.11812678]
+  [0.12563154]
+  [0.12195992]
+  [0.10415578]
+  [0.09237882]
+  [0.10255662]
+  [0.11768389]
+  [0.10565776]
+  [0.12831846]
+  [0.07406199]
+  [0.09388363]
+  [0.13371065]
+  [0.13825855]
+  [0.10022065]]]Max and min pixel values in predictions: -0.022300484, 0.025794474
+----------------------------------
+
+
+Time for epoch 2 is 134.03058886528015 sec
+Generator loss:2.5201712
+Texture disc loss:3.9544978
+Color disc loss:4.096235
+TV loss:0.0
+Content loss: 2.5638125
+Texture discrim output w/ fake images: [[[0.11687332]
+  [0.09538108]
+  [0.11888772]
+  [0.11691755]
+  [0.09918204]
+  [0.14021325]
+  [0.09652117]
+  [0.10646111]
+  [0.12458199]
+  [0.10119602]
+  [0.09942821]
+  [0.09450021]
+  [0.14129993]
+  [0.11959127]
+  [0.10604838]
+  [0.1332708 ]
+  [0.10592854]
+  [0.15666434]
+  [0.12707931]
+  [0.10535142]]]Max and min pixel values in predictions: 1.0, 1.0
+----------------------------------
+
+
