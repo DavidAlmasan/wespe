@@ -122,7 +122,8 @@ class WESPE():
         self.totalLoss_hist = []
 
         # Load data
-        if trainMode:
+        #if trainMode:
+        if trainMode or not trainMode:
             if self.dummyData is not None:
                 self.domA, self.domB = load_dummy_data(self.dummyData, self.patchSize, overlap = True, kSize = self.kSize, corrupt_types=self.data_corruption_types)
                 
@@ -203,8 +204,8 @@ class WESPE():
             if trainMode:
                 status = self.checkpoint.restore(tf.train.latest_checkpoint(self.load_ckpt_dir))
             else:
-                # status = self.checkpoint.restore(tf.train.latest_checkpoint(self.load_ckpt_dir)).expect_partial()
-                status = self.checkpoint.restore(tf.train.latest_checkpoint(self.load_ckpt_dir))
+                status = self.checkpoint.restore(tf.train.latest_checkpoint(self.load_ckpt_dir)).expect_partial()
+                #status = self.checkpoint.restore(tf.train.latest_checkpoint(self.load_ckpt_dir))
             print('Restored latest checkpoint from folder {}'.format((tf.train.latest_checkpoint(self.load_ckpt_dir))))
 
 
@@ -870,5 +871,5 @@ if __name__ == "__main__":
         model = WESPE(configPath,  trainMode = False, laptop = True)
     else:
         configPath = './config_files/wespe.config'  # GPU server
-        #model = WESPE(configPath,  trainMode = False, laptop = False)
-        model = WESPE(configPath,  trainMode = True, laptop = False)
+        model = WESPE(configPath,  trainMode = False, laptop = False)
+        #model = WESPE(configPath,  trainMode = True, laptop = False)
