@@ -1,3 +1,4 @@
+*.pyc
 deep_learning_marcanthia/SCRIPTS/data/
 *.tif
 *.pt
