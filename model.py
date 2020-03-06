@@ -164,7 +164,7 @@ class WESPE():
                         if len(image.shape) == 2: image = np.expand_dims(image, axis = -1)
                         image = (image - 127.5 ) / 127.5
                         images.append(image)
-            assert len(images) == 1
+            #assert len(images) == 1
             image = images[-1]
             self.testImg_patches = load_test_img_patches(image, patchSize = self.patchSize, kSize = self.kSize)
         else:
@@ -203,7 +203,8 @@ class WESPE():
             if trainMode:
                 status = self.checkpoint.restore(tf.train.latest_checkpoint(self.load_ckpt_dir))
             else:
-                status = self.checkpoint.restore(tf.train.latest_checkpoint(self.load_ckpt_dir)).expect_partial()
+                # status = self.checkpoint.restore(tf.train.latest_checkpoint(self.load_ckpt_dir)).expect_partial()
+                status = self.checkpoint.restore(tf.train.latest_checkpoint(self.load_ckpt_dir))
             print('Restored latest checkpoint from folder {}'.format((tf.train.latest_checkpoint(self.load_ckpt_dir))))
 
 
@@ -213,7 +214,7 @@ class WESPE():
             self.train(self.domA, self.domB, self.EPOCHS)
         else:
             print('Testing...')
-            output = self.colorDisc(self.testImg_patches, training = False).numpy()
+            # output = self.colorDisc(self.testImg_patches, training = False).numpy()
             testFolder = os.path.join(self.curFolder, 'model_tests')
             # timeName = timeName = str(now.month) +  '-' + str(now.day) + '-' + str(now.hour) + '-' + str(now.minute) + '-' + str(now.second)
             # testFolder = os.path.join(testFolder, timeName)
@@ -869,5 +870,5 @@ if __name__ == "__main__":
         model = WESPE(configPath,  trainMode = False, laptop = True)
     else:
         configPath = './config_files/wespe.config'  # GPU server
-        model = WESPE(configPath,  trainMode = False, laptop = False)
-        #model = WESPE(configPath,  trainMode = True, laptop = False)
+        #model = WESPE(configPath,  trainMode = False, laptop = False)
+        model = WESPE(configPath,  trainMode = True, laptop = False)
