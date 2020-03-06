@@ -65,6 +65,7 @@ class WESPE():
             self.labelFlippingPeriod = None
         self.discrimNoiseSTDDEV = self.config.get('discrim_noise_stddev', 0.01)
         self.preferGenerator = str(self.config.get('prefer_generator', False)) in ['yes', '1', 'true']
+        self.consistencyLoss = str(self.config.get('consistency_loss', False)) in ['yes', '1', 'true']
         
         self.kSize = 9  # TODO automatically assume somehow
         self.imgShape = (self.patchSize, self.patchSize, 1)
@@ -571,6 +572,10 @@ class WESPE():
             enhanced_images = self.G(domainA_imgs, training=True)
             reverted_images = self.F(enhanced_images, training=True)
 
+            # Cycle consistency 
+            degraded_images = self.F(domainB_imgs, training=True)
+            enh_after_degrade_images = self.G(degraded_images, training=True)
+
             textDisc_real_output = self.textDisc(domainB_imgs, training=False)
             textDisc_fake_output = self.textDisc(enhanced_images, training=False)
 
@@ -579,16 +584,22 @@ class WESPE():
             
             # Losses
             gen_loss = content_loss_v2(domainA_imgs, reverted_images, self.inter_VGG_model)
+            inverse_gen_loss = content_loss_v2(domainB_imgs, enh_after_degrade_images, self.inter_VGG_model)
             TV_loss = tv_loss(enhanced_images, self.imgShape)
             
             textDisc_loss = texture_loss(tf.ones_like(textDisc_real_output), textDisc_real_output) + \
                             texture_loss(tf.zeros_like(textDisc_fake_output), textDisc_fake_output)
             colorDisc_loss = color_loss(tf.ones_like(colorDisc_real_output), colorDisc_real_output) + \
                             color_loss(tf.zeros_like(textDisc_fake_output), colorDisc_fake_output)
+            if self.consistencyLoss:
+                inverse_transform_w = 1
+            else:
+                inverse_transform_w = 0
             total_gen_loss = self.contentW * gen_loss - \
                             self.textureW * textDisc_loss - \
                             self.colorW * colorDisc_loss + \
-                            self.tvW * TV_loss
+                            self.tvW * TV_loss + \
+                            inverse_transform_w * inverse_gen_loss
 
         
         gradients_of_G = genG_tape.gradient(total_gen_loss, self.G.trainable_variables)
@@ -609,6 +620,10 @@ class WESPE():
             enhanced_images = self.G(domainA_imgs, training=False)
             reverted_images = self.F(enhanced_images, training=False)
 
+            # Cycle consistency 
+            degraded_images = self.F(domainB_imgs, training=True)
+            enh_after_degrade_images = self.G(degraded_images, training=True)
+
             textDisc_real_output = self.textDisc(domainB_imgs, training=True)
             textDisc_fake_output = self.textDisc(enhanced_images, training=True)
 
@@ -617,6 +632,7 @@ class WESPE():
             
             # Losses
             gen_loss = content_loss_v2(domainA_imgs, reverted_images, self.inter_VGG_model)
+            inverse_gen_loss = content_loss_v2(domainB_imgs, enh_after_degrade_images, self.inter_VGG_model)
             TV_loss = tv_loss(enhanced_images, self.imgShape)
             if self.labelSmoothing:
                 text_real_labels = tf.random.uniform(textDisc_real_output.shape,
@@ -638,10 +654,15 @@ class WESPE():
             colorDisc_loss = color_loss(col_real_labels, colorDisc_real_output) + \
                              color_loss(col_fake_labels, colorDisc_fake_output)
 
+            if self.consistencyLoss:
+                inverse_transform_w = 1
+            else:
+                inverse_transform_w = 0
             total_gen_loss = self.contentW * gen_loss - \
                             self.textureW * textDisc_loss - \
                             self.colorW * colorDisc_loss + \
-                            self.tvW * TV_loss
+                            self.tvW * TV_loss + \
+                            inverse_transform_w * inverse_gen_loss
 
         
         gradients_of_textDisc = textDisc_tape.gradient(textDisc_loss, self.textDisc.trainable_variables)
@@ -660,6 +681,10 @@ class WESPE():
             enhanced_images = self.G(domainA_imgs, training=False)
             reverted_images = self.F(enhanced_images, training=False)
 
+            # Cycle consistency 
+            degraded_images = self.F(domainB_imgs, training=True)
+            enh_after_degrade_images = self.G(degraded_images, training=True)
+
             textDisc_real_output = self.textDisc(domainB_imgs, training=True)
             textDisc_fake_output = self.textDisc(enhanced_images, training=True)
 
@@ -668,6 +693,7 @@ class WESPE():
             
             # Losses
             gen_loss = content_loss_v2(domainA_imgs, reverted_images, self.inter_VGG_model)
+            inverse_gen_loss = content_loss_v2(domainB_imgs, enh_after_degrade_images, self.inter_VGG_model)
             TV_loss = tv_loss(enhanced_images, self.imgShape)
 
             if self.labelSmoothing:
@@ -691,10 +717,15 @@ class WESPE():
                              color_loss(col_fake_labels, colorDisc_fake_output)
 
 
+            if self.consistencyLoss:
+                inverse_transform_w = 1
+            else:
+                inverse_transform_w = 0
             total_gen_loss = self.contentW * gen_loss - \
                             self.textureW * textDisc_loss - \
                             self.colorW * colorDisc_loss + \
-                            self.tvW * TV_loss
+                            self.tvW * TV_loss + \
+                            inverse_transform_w * inverse_gen_loss
 
         
         gradients_of_textDisc = textDisc_tape.gradient(textDisc_loss, self.textDisc.trainable_variables)
