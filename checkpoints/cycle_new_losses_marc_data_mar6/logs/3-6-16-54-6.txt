@@ -1,0 +1,22 @@
+CONFIG: 
+
+
+Batch size: 20
+Epochs: 10
+Generator Learning Rate: 0.0001
+Discriminator Learning Rate: 1e-05
+Number of filters: 64
+Saving checkpoints to folder: cycle_new_losses_marc_data_mar6
+Loading checkpoints from folder: None
+Cyclegan used in generator: False
+Patch size: 128
+Dummy data used: NoneTest image used: ./test_data
+ 
+ LOSS PARAMETERS: 
+Content weight: 1.0
+Texture weight: 0.1
+Color weight: 0.1
+TV weight: 10.0
+---------------------------
+
+

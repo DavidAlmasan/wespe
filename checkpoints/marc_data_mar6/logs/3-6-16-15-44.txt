@@ -1,0 +1,51 @@
+CONFIG: 
+
+
+Batch size: 20
+Epochs: 20
+Generator Learning Rate: 0.0001
+Discriminator Learning Rate: 1e-05
+Number of filters: 64
+Saving checkpoints to folder: marc_data_mar6
+Loading checkpoints from folder: marc_data_feb28
+Cyclegan used in generator: False
+Patch size: 128
+Dummy data used: NoneTest image used: ./test_data
+ 
+ LOSS PARAMETERS: 
+Content weight: 1.0
+Texture weight: 0.01
+Color weight: 0.01
+TV weight: 10.0
+---------------------------
+
+
+Time for epoch 1 is 404.440292596817 sec
+Generator loss:0.04467988
+Texture disc loss:0.42808798
+Color disc loss:0.3916364
+TV loss:6.265433e-06
+Content loss: 0.042877246
+Texture discrim output w/ fake images: [[[0.05899829]
+  [0.03630394]
+  [0.04040599]
+  [0.05308649]
+  [0.04471871]
+  [0.05128905]
+  [0.03317946]
+  [0.03336173]
+  [0.0450334 ]
+  [0.0285688 ]
+  [0.03915599]
+  [0.06570867]
+  [0.04922661]
+  [0.04496539]
+  [0.02709264]
+  [0.04891253]
+  [0.05661991]
+  [0.0537782 ]
+  [0.03022686]
+  [0.041143  ]]]Max and min pixel values in predictions: -0.99961716, 0.7976773
+----------------------------------
+
+
