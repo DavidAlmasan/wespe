@@ -5,6 +5,8 @@ import numpy as np
 import imageio
 import re
 
+subprocess.call(['python', 'model.py'])
+
 curFolder = os.path.abspath(os.path.dirname(__file__))
 relImgFolder = './images_bulk_segmentation'
 relImgSaveFolder = os.path.join(relImgFolder, 'segmented')

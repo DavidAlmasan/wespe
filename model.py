@@ -216,23 +216,51 @@ class WESPE():
             self.train(self.domA, self.domB, self.EPOCHS)
         else:
             print('Testing...')
-            # output = self.colorDisc(self.testImg_patches, training = False).numpy()
             testFolder = os.path.join(self.curFolder, 'model_tests')
-            # timeName = timeName = str(now.month) +  '-' + str(now.day) + '-' + str(now.hour) + '-' + str(now.minute) + '-' + str(now.second)
-            # testFolder = os.path.join(testFolder, timeName)
             try: os.makedirs(testFolder, exist_ok = True)
             except: pass
 
-            # Enhance image
-            print('Enhancing image...')
-            predictions = self.G(self.testImg_patches, training=False).numpy()[:, self.kSize//2:-(self.kSize//2),self.kSize//2:-(self.kSize//2) :]
-            newImg = patches_to_img(predictions, self.patchSize, verbose = False)
-            print('min-max pixel values in enhanced image are : {}, {}'.format(min(newImg.flatten()), max(newImg.flatten())))
-            #plt.imshow(newImg[:, :, 0] * 127.5 + 127.5, cmap='gray')
-            #plt.axis('off')
-            enhImgPath = os.path.join(testFolder, 'enhanced_image.png')
-            cv2.imwrite(enhImgPath, newImg[:, :, 0] * 127.5 + 127.5)
+            # Enhance images
+            self.enhance_images(self.testImgPath, testFolder, copy_to_bulk=True)
+            # print('Enhancing image...')
+            # predictions = self.G(self.testImg_patches, training=False).numpy()[:, self.kSize//2:-(self.kSize//2),self.kSize//2:-(self.kSize//2) :]
+            # newImg = patches_to_img(predictions, self.patchSize, verbose = False)
+            # print('min-max pixel values in enhanced image are : {}, {}'.format(min(newImg.flatten()), max(newImg.flatten())))
+            # #plt.imshow(newImg[:, :, 0] * 127.5 + 127.5, cmap='gray')
+            # #plt.axis('off')
+            # enhImgPath = os.path.join(testFolder, 'enhanced_image.png')
+            # cv2.imwrite(enhImgPath, newImg[:, :, 0] * 127.5 + 127.5)
             
+    def enhance_images(self, relImgFolder, testFolder, copy_to_bulk=False):
+        print('Loading test images from test data folder {}'.format(relImgFolder))
+        testImgPath = os.path.join(self.curFolder, relImgFolder)
+        images, names = list(), list()
+        for root, dirnames, filenames in os.walk(testImgPath):
+            for filename in filenames:
+                if re.search("\.(jpg|jpeg|png|bmp|tiff)$", filename):
+                    filepath = os.path.join(root, filename)
+                    image = imageio.imread(filepath)
+                    if len(image.shape) == 2: image = np.expand_dims(image, axis = -1)
+                    image = (image - 127.5 ) / 127.5
+                    images.append(image)
+                    names.append(filename)
+        for image, name in zip(images, names):
+            testImg_patches = load_test_img_patches(image, patchSize = self.patchSize, kSize = self.kSize)
+            print('Enhancing image {}...'.format(name))
+            predictions = self.G(testImg_patches, training=False).numpy()[:, self.kSize//2:-(self.kSize//2),self.kSize//2:-(self.kSize//2) :]
+            newImg = patches_to_img(predictions, self.patchSize, verbose = False)
+            print('Min-max pixel values in enhanced image are : {}, {}'.format(min(newImg.flatten()), max(newImg.flatten())))
+            enhImgPath = os.path.join(testFolder, name + '_enhanced.png')
+            cv2.imwrite(enhImgPath, newImg[:, :, 0] * 127.5 + 127.5)
+            if copy_to_bulk:
+                bulk_folder = os.path.join(self.curFolder, 'images_bulk_segmentation')
+                enhImgPath = os.path.join(bulk_folder, name + '_enhanced.png')
+                cv2.imwrite(enhImgPath, newImg[:, :, 0] * 127.5 + 127.5)
+
+
+
+
+
 
     def test_model(self, _type, testImgPatches, crop = None, ploting = False):
         # assert testImg.shape == self.imgShape
