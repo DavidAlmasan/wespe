@@ -167,7 +167,7 @@ class WESPE():
                         image = (image - 127.5 ) / 127.5
                         images.append(image)
             #assert len(images) == 1
-            image = images[-1]
+            image = images[0]
             self.testImg_patches = load_test_img_patches(image, patchSize = self.patchSize, kSize = self.kSize)
         else:
             print('Using fourth patch form train data as test image')
