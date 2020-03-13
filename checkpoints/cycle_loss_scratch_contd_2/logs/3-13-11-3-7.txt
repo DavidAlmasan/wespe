@@ -1,0 +1,22 @@
+CONFIG: 
+
+
+Batch size: 20
+Epochs: 50
+Generator Learning Rate: 0.001
+Discriminator Learning Rate: 0.0001
+Number of filters: 64
+Saving checkpoints to folder: cycle_loss_scratch_contd_2
+Loading checkpoints from folder: cycle_loss_scratch_contd_2
+Cyclegan used in generator: False
+Patch size: 128
+Dummy data used: NoneTest image used: ./test_data
+ 
+ LOSS PARAMETERS: 
+Content weight: 1.0
+Texture weight: 0.01
+Color weight: 0.01
+TV weight: 30.0
+---------------------------
+
+
