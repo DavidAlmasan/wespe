@@ -357,7 +357,14 @@ def variance_map():
                     if len(image.shape) == 2: image = np.expand_dims(image, axis = -1)
                     images.append(image)
 
+    
     # # Segment the images
+    watershed = True
+    #if watershed:
+    #    seg_folder = './sr795'
+    #    rel_to_main_folder = '../'
+    #    relModelPath = '../../../'
+    #else:
     seg_folder = './deep_learning_marcanthia/SCRIPTS/segmentation'
     rel_to_main_folder = '../../../'
     relModelPath = '../semseg_model_100epochs_16fdim_unet16_bce.pt'

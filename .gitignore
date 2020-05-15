@@ -1,3 +1,4 @@
+imgs_for_variance/
 imgs_for_variance/*.png
 imgs_for_variance/segmented/*.png
 !imgs_for_variance/segmented/variance.png

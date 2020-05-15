@@ -222,7 +222,7 @@ class WESPE():
             except: pass
 
             # Enhance images
-            self.enhance_images(self.testImgPath, testFolder, copy_to_bulk=False, varianceMap = True)
+            self.enhance_images(self.testImgPath, testFolder, copy_to_bulk=False, varianceMap = False)
             # print('Enhancing image...')
             # predictions = self.G(self.testImg_patches, training=False).numpy()[:, self.kSize//2:-(self.kSize//2),self.kSize//2:-(self.kSize//2) :]
             # newImg = patches_to_img(predictions, self.patchSize, verbose = False)
