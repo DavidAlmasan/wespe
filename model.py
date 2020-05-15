@@ -5,6 +5,7 @@ import numpy as np
 import sys, os
 import PIL
 import json
+import shutil
 import tensorflow as tf
 import datetime
 try:import tensorflow_addons as tfa
@@ -231,7 +232,7 @@ class WESPE():
             # enhImgPath = os.path.join(testFolder, 'enhanced_image.png')
             # cv2.imwrite(enhImgPath, newImg[:, :, 0] * 127.5 + 127.5)
             
-    def enhance_images(self, relImgFolder, testFolder, copy_to_bulk=False):
+    def enhance_images(self, relImgFolder, testFolder, copy_to_bulk=False, varianceMap = False):
         print('Loading test images from test data folder {}'.format(relImgFolder))
         testImgPath = os.path.join(self.curFolder, relImgFolder)
         images, names = list(), list()
@@ -244,14 +245,30 @@ class WESPE():
                     image = (image - 127.5 ) / 127.5
                     images.append(image)
                     names.append(filename)
-        for image, name in zip(images, names):
-            testImg_patches = load_test_img_patches(image, patchSize = self.patchSize, kSize = self.kSize)
-            print('Enhancing image {}...'.format(name))
-            predictions = self.G(testImg_patches, training=False).numpy()[:, self.kSize//2:-(self.kSize//2),self.kSize//2:-(self.kSize//2) :]
-            newImg = patches_to_img(predictions, self.patchSize, verbose = False)
-            print('Min-max pixel values in enhanced image are : {}, {}'.format(min(newImg.flatten()), max(newImg.flatten())))
-            enhImgPath = os.path.join(testFolder, name + '_enhanced.png')
-            cv2.imwrite(enhImgPath, newImg[:, :, 0] * 127.5 + 127.5)
+        if varianceMap: # will take the first image and apply blur to create 100 different images 
+            image, name = images[0], names[0]
+            varianceFolder = os.path.join(self.curFolder, 'imgs_for_variance')
+            if os.path.isdir(varianceFolder):
+                shutil.rmtree(varianceFolder)
+            os.makedirs(varianceFolder)
+            for i in range(100):
+                noisy = noisy('gauss', image, var = 40)
+                testImg_patches = load_test_img_patches(image, patchSize = self.patchSize, kSize = self.kSize)
+                print('Enhancing image {}...'.format(name + '_' + str(i)))
+                predictions = self.G(testImg_patches, training=False).numpy()[:, self.kSize//2:-(self.kSize//2),self.kSize//2:-(self.kSize//2) :]
+                newImg = patches_to_img(predictions, self.patchSize, verbose = False)
+                # print('Min-max pixel values in enhanced image are : {}, {}'.format(min(newImg.flatten()), max(newImg.flatten())))
+                enhImgPath = os.path.join(varianceFolder, name + '_' + str(i) + '_enhanced.png')
+                cv2.imwrite(enhImgPath, newImg[:, :, 0] * 127.5 + 127.5)
+        else:
+            for image, name in zip(images, names):
+                testImg_patches = load_test_img_patches(image, patchSize = self.patchSize, kSize = self.kSize)
+                print('Enhancing image {}...'.format(name))
+                predictions = self.G(testImg_patches, training=False).numpy()[:, self.kSize//2:-(self.kSize//2),self.kSize//2:-(self.kSize//2) :]
+                newImg = patches_to_img(predictions, self.patchSize, verbose = False)
+                print('Min-max pixel values in enhanced image are : {}, {}'.format(min(newImg.flatten()), max(newImg.flatten())))
+                enhImgPath = os.path.join(testFolder, name + '_enhanced.png')
+                cv2.imwrite(enhImgPath, newImg[:, :, 0] * 127.5 + 127.5)
             if copy_to_bulk:
                 bulk_folder = os.path.join(self.curFolder, 'images_bulk_segmentation')
                 enhImgPath = os.path.join(bulk_folder, name + '_enhanced.png')

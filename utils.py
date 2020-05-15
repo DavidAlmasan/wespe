@@ -1,5 +1,5 @@
 import time
-import tensorflow as tf
+# import tensorflow as tf
 import os
 from scipy import ndimage, misc
 import re
@@ -8,10 +8,13 @@ import matplotlib.pyplot as plt
 import numpy as np
 import numpy as np
 import scipy.stats as st
-import tensorflow_datasets as tfds
+# import tensorflow_datasets as tfds
 import cv2
+import shutil
 from sklearn.feature_extraction import image
 import matplotlib.pyplot as plt
+import subprocess
+# import deep_learning_marcanthia.SCRIPTS.segmentation.semantic_model_testing as sem_model
 
 
 def _instance_norm(net):
@@ -50,11 +53,10 @@ def rgb2grey(img):
 def blur_img(img):
     return cv2.blur(img, (3, 3))
 
-def noisy(noise_typ,image):
+def noisy(noise_typ,image, var = 40):
     if noise_typ == "gauss":
         row,col,ch= image.shape
         mean = 0
-        var = 40
         sigma = var**0.5
         gauss = np.random.normal(mean,sigma,(row,col,ch))
         gauss = gauss.reshape(row,col,ch)
@@ -327,17 +329,86 @@ def plot_metrics(path):
         if 'Content loss' in line:
             try: contentLoss.append(float(line[-1]))
             except: contentLoss = [float(line[-1])]
-    return genLoss, textDisc, colDisc, contentLoss
+        if 'TV loss' in line:
+            try: TV_loss.append(float(line[-1]))
+            except: TV_loss = [float(line[-1])]
+    return genLoss, textDisc, colDisc, contentLoss, TV_loss
+
+def variance_map():
+    # # Create images with fake noise
+    # # Make sure config.py is set accordingly
+    # subprocess.call(['python', 'model.py'])
+
+    # curFolder = os.path.abspath(os.path.dirname(__file__))
+    # relImgFolder = './imgs_for_variance'
+    # relImgSaveFolder = os.path.join(relImgFolder, 'segmented')
+    # if os.isdir(relImgSaveFolder):
+    #     shutil.rmtree(relImgSaveFolder)
+    # os.makedirs(relImgSaveFolder)
+    # imgFolder = os.path.join(curFolder, relImgFolder)
+    # images = list()
+    # names = list()
+    # for root, dirnames, filenames in os.walk(imgFolder):
+    #         for filename in filenames:
+    #             if re.search("\.(jpg|jpeg|png|bmp|tiff)$", filename):
+    #                 filepath = os.path.join(root, filename)
+    #                 names.append(filename)
+    #                 image = imageio.imread(filepath)
+    #                 if len(image.shape) == 2: image = np.expand_dims(image, axis = -1)
+    #                 images.append(image)
+
+    # # Segment the images
+    # seg_folder = './deep_learning_marcanthia/SCRIPTS/segmentation'
+    # rel_to_main_folder = '../../../'
+    # relModelPath = '../semseg_model_100epochs_16fdim_unet16_bce.pt'
+
+    # for img, name in zip(images, names):
+    #     saveImgPath = os.path.join(relImgSaveFolder, name[:-4] + '_segmented.png')
+    #     relTestImgPath = os.path.join(relImgFolder, name)
+
+    #     inputPath = os.path.join(rel_to_main_folder, relTestImgPath)
+    #     saveImgPath = os.path.join(rel_to_main_folder, saveImgPath)
+    #     sem_model.test_semantic_model(inputImgPath=inputPath,
+    #                                 modelPath = relModelPath,
+    #                                 saveImgPath = saveImgPath)
+
+
+
+    # retrieve segmented images and create the variance plot 
+    ### DUMMY 
+    relImgFolder = './images_bulk_segmentation'
+    relImgSaveFolder = os.path.join(relImgFolder, 'segmented')
+    images = list()
+    print('a')
+    for root, dirnames, filenames in os.walk(relImgSaveFolder):
+        for filename in filenames:
+            if re.search("\.(jpg|jpeg|png|bmp|tiff)$", filename):
+                filepath = os.path.join(root, filename)
+                image = imageio.imread(filepath)
+                if len(image.shape) == 2: image = np.expand_dims(image, axis = -1)
+                images.append(image[:, :, 0]) #black and white
+    images = np.sign(np.asarray(images))
+    var = np.var(images, axis = 0)
+    print('Shape of array containing segmented images is {}'.format(var.shape))
+    cv2.imshow('var', var)
+    cv2.waitKey(0)
+    cv2.destroyAllWindows()
 
 if __name__ == "__main__":
-    # path = 'logs/dped_gan/11-18-16-19-30.txt'
-    # a, b, c, d = plot_metrics(path)
+    path = 'checkpoints/cycle_loss_scratch_contd/logs/3-11-20-12-59.txt'  #the good one
+    # path = 'checkpoints/cycle_loss_scratch_contd_2/logs/3-12-19-39-24.txt'
+    # a, b, c, d, e = plot_metrics(path)
     # #%%
-    # plt.plot(a)
+    # plt.plot(e)
     # plt.show()
-    a, b = load_dummy_data('horses_or_humans', overlap = True, kSize = 9, patchSize = 100)
-    print(type(a))
-    print(a.shape)
+    variance_map()
+
+
+
+
+    # a, b = load_dummy_data('horses_or_humans', overlap = True, kSize = 9, patchSize = 100)
+    # print(type(a))
+    # print(a.shape)
     # print(a.shape, b.shape)
 
     #a = cv2.imread('domB/test_image_orig.png')
