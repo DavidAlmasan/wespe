@@ -1,3 +1,6 @@
+imgs_for_variance/*.png
+imgs_for_variance/segmented/*.png
+!imgs_for_variance/segmented/variance.png
 nohup.out
 *.pyc
 deep_learning_marcanthia/SCRIPTS/data/

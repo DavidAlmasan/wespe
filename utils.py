@@ -386,11 +386,11 @@ def variance_map():
                 filepath = os.path.join(root, filename)
                 image = imageio.imread(filepath)
                 if len(image.shape) == 2: image = np.expand_dims(image, axis = -1)
-                images.append(image[:, :, 0]) #black and white
-    images = np.sign(np.asarray(images))
+                images.append(np.sign(image[:, :, 0])) #black and white
+    images = np.asarray(images)
     var = np.var(images, axis = 0)
-    print('Shape of array containing segmented images is {}'.format(var.shape))
-    cv2.imwrite(os.path.join(relImgSaveFolder, 'variance.png'), var)
+    print('Shape of array containing segmented images is {}'.format(images.shape))
+    cv2.imwrite(os.path.join(relImgSaveFolder, 'variance.png'), (var * 255).astype(np.int))
     #cv2.waitKey(0)
     #cv2.destroyAllWindows()
 
