@@ -19,6 +19,7 @@ import torchvision.transforms.functional as TF
 
 # What input image do you want to test?
 input_img_filepath = '../test_data/200224_LQ_LQ-Position001.tiff'
+input_img_filepath = '../test_data_ULQ/200318_ULQ-Position078.tiff'
 #input_img_filepath = '../data/test2.tiff'
 #input_img_filepath = '../data/marcanthia_enhanced.png' 
 #input_img_filepath = '../data/trial.png'
