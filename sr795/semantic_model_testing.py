@@ -25,7 +25,7 @@ input_img_filepath = '../test_data/200224_LQ_LQ-Position001.tiff'
 # Where is the model you want to test?
 #model_filepath = './semseg_results/check_point_clean_seg.pt'
 #model_filepath = '../data/semseg_model_100epochs_16fdim_unet16_bce.pt'
-model_filepath = '../../../../sr795/DeepLearningFourthYear/deep-learning-marcanthia/SCRIPTS/segmentation/semseg_results/final_model.pt'
+model_filepath = '../../../../sr795/DeepLearningFourthYear/deep-learning-marchantia/SCRIPTS/segmentation/semseg_results/final_model.pt'
 # Where would you like to save the image?
 save_img_location = './sem_test_result.png'
 
