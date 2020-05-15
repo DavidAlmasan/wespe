@@ -254,7 +254,7 @@ class WESPE():
             os.makedirs(varianceFolder)
             cv2.imwrite(os.path.join(varianceFolder, 'original.png'), image)
             for i in range(2):
-                noisy_img = (noisy('gauss', image, var = 0) - 127.5) / 127.5
+                noisy_img = (noisy('gauss', image, var = 20) - 127.5) / 127.5
                 testImg_patches = load_test_img_patches(noisy_img, patchSize = self.patchSize, kSize = self.kSize)
                 print('Enhancing image {}...'.format(name + '_' + str(i)))
                 predictions = self.G(testImg_patches, training=False).numpy()[:, self.kSize//2:-(self.kSize//2),self.kSize//2:-(self.kSize//2) :]
