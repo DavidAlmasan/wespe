@@ -248,11 +248,12 @@ class WESPE():
         if varianceMap: # will take the first image and apply blur to create 100 different images 
             image, name = images[0], names[0]
             varianceFolder = os.path.join(self.curFolder, 'imgs_for_variance')
+            cv2.imwrite(os.path.join(varianceFolder, 'original.png'), image)
             if os.path.isdir(varianceFolder):
                 shutil.rmtree(varianceFolder)
             os.makedirs(varianceFolder)
             for i in range(2):
-                noisy_img = noisy('gauss', image, var = 40)
+                noisy_img = noisy('gauss', image, var = 0)
                 testImg_patches = load_test_img_patches(noisy_img, patchSize = self.patchSize, kSize = self.kSize)
                 print('Enhancing image {}...'.format(name + '_' + str(i)))
                 predictions = self.G(testImg_patches, training=False).numpy()[:, self.kSize//2:-(self.kSize//2),self.kSize//2:-(self.kSize//2) :]
