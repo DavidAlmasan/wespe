@@ -20,7 +20,7 @@ import torchvision.transforms.functional as TF
 # What input image do you want to test?
 input_img_filepath = '../test_data/200224_LQ_LQ-Position001.tiff'
 input_img_filepath = '../watershed_comparison_photos/original.tiff'
-#input_img_filepath = '../watershed_comparison_photos/enhanced.png'
+input_img_filepath = '../watershed_comparison_photos/enhanced.png'
 #input_img_filepath = '../data/test2.tiff'
 #input_img_filepath = '../data/marcanthia_enhanced.png' 
 #input_img_filepath = '../data/trial.png'
@@ -29,7 +29,7 @@ input_img_filepath = '../watershed_comparison_photos/original.tiff'
 #model_filepath = '../data/semseg_model_100epochs_16fdim_unet16_bce.pt'
 model_filepath = '../../../../sr795/DeepLearningFourthYear/deep-learning-marchantia/SCRIPTS/segmentation/semseg_results/final_model.pt'
 # Where would you like to save the image?
-save_img_location = './sem_original.png'
+save_img_location = './sem_enhanced.png'
 
 num_feature_dim = 16
 
