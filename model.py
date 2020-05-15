@@ -246,7 +246,8 @@ class WESPE():
                     images.append(image)
                     names.append(filename)
         if varianceMap: # will take the first image and apply blur to create 100 different images 
-            image, name = images[0], names[0]
+            image, name = images[0] * 127.5 + 127.5, names[0]
+            print('asdadasda;', image.shape)
             varianceFolder = os.path.join(self.curFolder, 'imgs_for_variance')
             cv2.imwrite(os.path.join(varianceFolder, 'original.png'), image)
             if os.path.isdir(varianceFolder):
