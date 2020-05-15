@@ -26,7 +26,7 @@ import re
 from IPython import display
 import cv2 
 
-from utils import load_data, generate_and_save_images, load_dummy_data, img_to_patches, patches_to_img, remove_padding, load_test_img_patches
+from utils import load_data, generate_and_save_images, load_dummy_data, img_to_patches, patches_to_img, remove_padding, load_test_img_patches, noisy
 from utils import gauss_kernel, _instance_norm, save_metrics
 from loss_functions import content_loss, color_loss, texture_loss, content_loss_v2, tv_loss, total_loss_agg
 import deep_learning_marcanthia.SCRIPTS.segmentation.semantic_model_testing as sem_model
@@ -222,7 +222,7 @@ class WESPE():
             except: pass
 
             # Enhance images
-            self.enhance_images(self.testImgPath, testFolder, copy_to_bulk=True)
+            self.enhance_images(self.testImgPath, testFolder, copy_to_bulk=False, varianceMap = True)
             # print('Enhancing image...')
             # predictions = self.G(self.testImg_patches, training=False).numpy()[:, self.kSize//2:-(self.kSize//2),self.kSize//2:-(self.kSize//2) :]
             # newImg = patches_to_img(predictions, self.patchSize, verbose = False)
@@ -251,9 +251,9 @@ class WESPE():
             if os.path.isdir(varianceFolder):
                 shutil.rmtree(varianceFolder)
             os.makedirs(varianceFolder)
-            for i in range(100):
-                noisy = noisy('gauss', image, var = 40)
-                testImg_patches = load_test_img_patches(image, patchSize = self.patchSize, kSize = self.kSize)
+            for i in range(2):
+                noisy_img = noisy('gauss', image, var = 40)
+                testImg_patches = load_test_img_patches(noisy_img, patchSize = self.patchSize, kSize = self.kSize)
                 print('Enhancing image {}...'.format(name + '_' + str(i)))
                 predictions = self.G(testImg_patches, training=False).numpy()[:, self.kSize//2:-(self.kSize//2),self.kSize//2:-(self.kSize//2) :]
                 newImg = patches_to_img(predictions, self.patchSize, verbose = False)
@@ -947,5 +947,5 @@ if __name__ == "__main__":
         model = WESPE(configPath,  trainMode = False, laptop = True)
     else:
         configPath = './config_files/wespe.config'  # GPU server
-        #model = WESPE(configPath,  trainMode = False, laptop = False)
-        model = WESPE(configPath,  trainMode = True, laptop = False)
+        model = WESPE(configPath,  trainMode = False, laptop = False)
+        #model = WESPE(configPath,  trainMode = True, laptop = False)

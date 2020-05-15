@@ -1,5 +1,5 @@
 import time
-# import tensorflow as tf
+import tensorflow as tf
 import os
 from scipy import ndimage, misc
 import re
@@ -8,13 +8,13 @@ import matplotlib.pyplot as plt
 import numpy as np
 import numpy as np
 import scipy.stats as st
-# import tensorflow_datasets as tfds
+import tensorflow_datasets as tfds
 import cv2
 import shutil
 from sklearn.feature_extraction import image
 import matplotlib.pyplot as plt
 import subprocess
-# import deep_learning_marcanthia.SCRIPTS.segmentation.semantic_model_testing as sem_model
+import deep_learning_marcanthia.SCRIPTS.segmentation.semantic_model_testing as sem_model
 
 
 def _instance_norm(net):
@@ -335,49 +335,49 @@ def plot_metrics(path):
     return genLoss, textDisc, colDisc, contentLoss, TV_loss
 
 def variance_map():
-    # # Create images with fake noise
-    # # Make sure config.py is set accordingly
-    # subprocess.call(['python', 'model.py'])
+    # Create images with fake noise
+    # Make sure config.py is set accordingly
+    subprocess.call(['python', 'model.py'])
 
-    # curFolder = os.path.abspath(os.path.dirname(__file__))
-    # relImgFolder = './imgs_for_variance'
-    # relImgSaveFolder = os.path.join(relImgFolder, 'segmented')
-    # if os.isdir(relImgSaveFolder):
-    #     shutil.rmtree(relImgSaveFolder)
-    # os.makedirs(relImgSaveFolder)
-    # imgFolder = os.path.join(curFolder, relImgFolder)
-    # images = list()
-    # names = list()
-    # for root, dirnames, filenames in os.walk(imgFolder):
-    #         for filename in filenames:
-    #             if re.search("\.(jpg|jpeg|png|bmp|tiff)$", filename):
-    #                 filepath = os.path.join(root, filename)
-    #                 names.append(filename)
-    #                 image = imageio.imread(filepath)
-    #                 if len(image.shape) == 2: image = np.expand_dims(image, axis = -1)
-    #                 images.append(image)
+    curFolder = os.path.abspath(os.path.dirname(__file__))
+    relImgFolder = './imgs_for_variance'
+    relImgSaveFolder = os.path.join(relImgFolder, 'segmented')
+    if os.path.isdir(relImgSaveFolder):
+        shutil.rmtree(relImgSaveFolder)
+    os.makedirs(relImgSaveFolder)
+    imgFolder = os.path.join(curFolder, relImgFolder)
+    images = list()
+    names = list()
+    for root, dirnames, filenames in os.walk(imgFolder):
+            for filename in filenames:
+                if re.search("\.(jpg|jpeg|png|bmp|tiff)$", filename):
+                    filepath = os.path.join(root, filename)
+                    names.append(filename)
+                    image = imageio.imread(filepath)
+                    if len(image.shape) == 2: image = np.expand_dims(image, axis = -1)
+                    images.append(image)
 
     # # Segment the images
-    # seg_folder = './deep_learning_marcanthia/SCRIPTS/segmentation'
-    # rel_to_main_folder = '../../../'
-    # relModelPath = '../semseg_model_100epochs_16fdim_unet16_bce.pt'
+    seg_folder = './deep_learning_marcanthia/SCRIPTS/segmentation'
+    rel_to_main_folder = '../../../'
+    relModelPath = '../semseg_model_100epochs_16fdim_unet16_bce.pt'
 
-    # for img, name in zip(images, names):
-    #     saveImgPath = os.path.join(relImgSaveFolder, name[:-4] + '_segmented.png')
-    #     relTestImgPath = os.path.join(relImgFolder, name)
+    for img, name in zip(images, names):
+        saveImgPath = os.path.join(relImgSaveFolder, name[:-4] + '_segmented.png')
+        relTestImgPath = os.path.join(relImgFolder, name)
 
-    #     inputPath = os.path.join(rel_to_main_folder, relTestImgPath)
-    #     saveImgPath = os.path.join(rel_to_main_folder, saveImgPath)
-    #     sem_model.test_semantic_model(inputImgPath=inputPath,
-    #                                 modelPath = relModelPath,
-    #                                 saveImgPath = saveImgPath)
+        inputPath = os.path.join(rel_to_main_folder, relTestImgPath)
+        saveImgPath = os.path.join(rel_to_main_folder, saveImgPath)
+        sem_model.test_semantic_model(inputImgPath=inputPath,
+                                    modelPath = relModelPath,
+                                    saveImgPath = saveImgPath)
 
 
 
     # retrieve segmented images and create the variance plot 
     ### DUMMY 
-    relImgFolder = './images_bulk_segmentation'
-    relImgSaveFolder = os.path.join(relImgFolder, 'segmented')
+    #relImgFolder = './images_bulk_segmentation'
+    #relImgSaveFolder = os.path.join(relImgFolder, 'segmented')
     images = list()
     print('a')
     for root, dirnames, filenames in os.walk(relImgSaveFolder):
@@ -390,9 +390,9 @@ def variance_map():
     images = np.sign(np.asarray(images))
     var = np.var(images, axis = 0)
     print('Shape of array containing segmented images is {}'.format(var.shape))
-    cv2.imshow('var', var)
-    cv2.waitKey(0)
-    cv2.destroyAllWindows()
+    cv2.imwrite(os.path.join(relImgSaveFolder, 'variance.png'), var)
+    #cv2.waitKey(0)
+    #cv2.destroyAllWindows()
 
 if __name__ == "__main__":
     path = 'checkpoints/cycle_loss_scratch_contd/logs/3-11-20-12-59.txt'  #the good one

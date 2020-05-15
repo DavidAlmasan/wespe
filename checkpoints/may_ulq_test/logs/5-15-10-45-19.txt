@@ -1,0 +1,22 @@
+CONFIG: 
+
+
+Batch size: 20
+Epochs: 20
+Generator Learning Rate: 0.0005
+Discriminator Learning Rate: 1e-05
+Number of filters: 64
+Saving checkpoints to folder: may_ulq_test
+Loading checkpoints from folder: may_ulq
+Cyclegan used in generator: False
+Patch size: 128
+Dummy data used: NoneTest image used: ./test_data_HQ
+ 
+ LOSS PARAMETERS: 
+Content weight: 1.0
+Texture weight: 0.01
+Color weight: 0.01
+TV weight: 40.0
+---------------------------
+
+
