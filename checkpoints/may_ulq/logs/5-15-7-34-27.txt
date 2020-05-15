@@ -1,0 +1,33 @@
+CONFIG: 
+
+
+Batch size: 2
+Epochs: 10
+Generator Learning Rate: 0.0005
+Discriminator Learning Rate: 1e-05
+Number of filters: 64
+Saving checkpoints to folder: may_ulq
+Loading checkpoints from folder: None
+Cyclegan used in generator: False
+Patch size: 128
+Dummy data used: NoneTest image used: ./test_data
+ 
+ LOSS PARAMETERS: 
+Content weight: 1.0
+Texture weight: 0.01
+Color weight: 0.01
+TV weight: 40.0
+---------------------------
+
+
+Time for epoch 1 is 515.1760833263397 sec
+Generator loss:8.123666
+Texture disc loss:0.44868508
+Color disc loss:0.6008682
+TV loss:3.842433e-22
+Content loss: 7.6844497
+Texture discrim output w/ fake images: [[[0.11950506]
+  [0.13057053]]]Max and min pixel values in predictions: -0.062280014, 0.0018399495
+----------------------------------
+
+
