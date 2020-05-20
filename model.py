@@ -356,27 +356,27 @@ class WESPE():
                         strides = 1,
                         padding = 'SAME',
                         name = ('Generator_%s_CYCLE_CONV_1_1' %_type),
-                        # activation = 'relu',
+                        activation = 'relu',
                         kernel_initializer=self.init)(proc)
-            proc = LeakyReLU(alpha=0.2)(proc)
+            #proc = LeakyReLU(alpha=0.2)(proc)
 
             proc = Conv2D(numFilters,
                         (3, 3),
                         strides = 1,
                         padding = 'SAME',
                         name = ('Generator_%s_CYCLE_CONV_1_2' %_type),
-                        # activation = 'relu',
+                        activation = 'relu',
                         kernel_initializer=self.init)(proc)
-            proc = LeakyReLU(alpha=0.2)(proc)
+            #proc = LeakyReLU(alpha=0.2)(proc)
 
             proc = Conv2D(numFilters,
                         (3, 3),
                         strides = 1,
                         padding = 'SAME',
                         name = ('Generator_%s_CYCLE_CONV_1_3' %_type),
-                        # activation = 'relu',
+                        activation = 'relu',
                         kernel_initializer=self.init)(proc)
-            proc = LeakyReLU(alpha=0.2)(proc)
+            #proc = LeakyReLU(alpha=0.2)(proc)
 
         else:
             proc = Conv2D(numFilters,
@@ -400,27 +400,27 @@ class WESPE():
                         strides = 1,
                         padding = 'SAME',
                         name = ('Generator_%s_CYCLE_DECONV_1' %_type),
-                        # activation = 'relu',
+                        activation = 'relu',
                         kernel_initializer=self.init)(proc)
-            proc = LeakyReLU(alpha=0.2)(proc)
+            #proc = LeakyReLU(alpha=0.2)(proc)
 
             proc = Conv2DTranspose(numFilters,
                         (3, 3),
                         strides = 1,
                         padding = 'SAME',
                         name = ('Generator_%s_CYCLE_DECONV_2' %_type),
-                        # activation = 'relu',
+                        activation = 'relu',
                         kernel_initializer=self.init)(proc)
-            proc = LeakyReLU(alpha=0.2)(proc)
+            #proc = LeakyReLU(alpha=0.2)(proc)
 
             proc = Conv2DTranspose(numFilters,
                         (9, 9),
                         strides = 1,
                         padding = 'SAME',
                         name = ('Generator_%s_CYCLE_DECONV_3' %_type),
-                        # activation = 'relu',
+                        activation = 'relu',
                         kernel_initializer=self.init)(proc)
-            proc = LeakyReLU(alpha=0.2)(proc)
+            #proc = LeakyReLU(alpha=0.2)(proc)
 
         else:
         ### Orig architecture with onvolutional layers
@@ -949,5 +949,5 @@ if __name__ == "__main__":
         model = WESPE(configPath,  trainMode = False, laptop = True)
     else:
         configPath = './config_files/wespe.config'  # GPU server
-        #model = WESPE(configPath,  trainMode = False, laptop = False)
-        model = WESPE(configPath,  trainMode = True, laptop = False)
+        model = WESPE(configPath,  trainMode = False, laptop = False)
+        #model = WESPE(configPath,  trainMode = True, laptop = False)

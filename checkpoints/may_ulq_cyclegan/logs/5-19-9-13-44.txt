@@ -1,0 +1,22 @@
+CONFIG: 
+
+
+Batch size: 1
+Epochs: 2
+Generator Learning Rate: 0.0005
+Discriminator Learning Rate: 1e-05
+Number of filters: 64
+Saving checkpoints to folder: may_ulq_cyclegan
+Loading checkpoints from folder: None
+Cyclegan used in generator: True
+Patch size: 64
+Dummy data used: NoneTest image used: ./watershed_comparison_photos
+ 
+ LOSS PARAMETERS: 
+Content weight: 1.0
+Texture weight: 0.01
+Color weight: 0.01
+TV weight: 20.0
+---------------------------
+
+
