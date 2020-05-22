@@ -220,7 +220,7 @@ class WESPE():
             testFolder = os.path.join(self.curFolder, 'model_tests')
             try: os.makedirs(testFolder, exist_ok = True)
             except: pass
-
+            return
             # Enhance images
             self.enhance_images(self.testImgPath, testFolder, copy_to_bulk=False, varianceMap = False)
             # print('Enhancing image...')
@@ -314,7 +314,8 @@ class WESPE():
 
         self.colorDisc = self.get_discriminator_model(self.numFilters, 'color')
         self.textDisc = self.get_discriminator_model(self.numFilters, 'texture')
-
+        #print(self.G.summary())
+        #print('-------\n', self.textDisc.summary())
     def get_generator_model(self, numFilters, _type):
         _type = _type.upper()
         assert _type in self.genTypes
@@ -950,4 +951,4 @@ if __name__ == "__main__":
     else:
         configPath = './config_files/wespe.config'  # GPU server
         model = WESPE(configPath,  trainMode = False, laptop = False)
-        #model = WESPE(configPath,  trainMode = True, laptop = False)
+       # model = WESPE(configPath,  trainMode = True, laptop = False)
