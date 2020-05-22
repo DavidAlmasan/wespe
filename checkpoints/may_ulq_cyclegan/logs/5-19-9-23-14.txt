@@ -1,0 +1,42 @@
+CONFIG: 
+
+
+Batch size: 1
+Epochs: 2
+Generator Learning Rate: 0.0005
+Discriminator Learning Rate: 1e-05
+Number of filters: 64
+Saving checkpoints to folder: may_ulq_cyclegan
+Loading checkpoints from folder: None
+Cyclegan used in generator: True
+Patch size: 50
+Dummy data used: NoneTest image used: ./watershed_comparison_photos
+ 
+ LOSS PARAMETERS: 
+Content weight: 1.0
+Texture weight: 0.01
+Color weight: 0.01
+TV weight: 20.0
+---------------------------
+
+
+Time for epoch 1 is 2389.953549146652 sec
+Generator loss:6.940349
+Texture disc loss:3.9580083
+Color disc loss:4.1589193
+TV loss:0.0
+Content loss: 6.5909543
+Texture discrim output w/ fake images: [[[0.11836269]]]Max and min pixel values in predictions: -0.0009508278, 0.004731268
+----------------------------------
+
+
+Time for epoch 2 is 2334.7535004615784 sec
+Generator loss:6.954474
+Texture disc loss:4.337702
+Color disc loss:4.060649
+TV loss:0.0
+Content loss: 6.6078935
+Texture discrim output w/ fake images: [[[0.1006659]]]Max and min pixel values in predictions: -1.0, -1.0
+----------------------------------
+
+
