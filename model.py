@@ -220,7 +220,7 @@ class WESPE():
             testFolder = os.path.join(self.curFolder, 'model_tests')
             try: os.makedirs(testFolder, exist_ok = True)
             except: pass
-            return
+            #return
             # Enhance images
             self.enhance_images(self.testImgPath, testFolder, copy_to_bulk=False, varianceMap = False)
             # print('Enhancing image...')
@@ -951,8 +951,4 @@ if __name__ == "__main__":
     else:
         configPath = './config_files/wespe.config'  # GPU server
         model = WESPE(configPath,  trainMode = False, laptop = False)
-<<<<<<< HEAD
-        #model = WESPE(configPath,  trainMode = True, laptop = False)
-=======
        # model = WESPE(configPath,  trainMode = True, laptop = False)
->>>>>>> 1cc718b953ec320cb91c28fe3c3010fed07ae88f
