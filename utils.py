@@ -1,20 +1,20 @@
 import time
-import tensorflow as tf
+# import tensorflow as tf
 import os
 from scipy import ndimage, misc
 import re
-import imageio
+# import imageio
 import matplotlib.pyplot as plt
 import numpy as np
 import numpy as np
 import scipy.stats as st
-import tensorflow_datasets as tfds
+# import tensorflow_datasets as tfds
 import cv2
 import shutil
 from sklearn.feature_extraction import image
 import matplotlib.pyplot as plt
 import subprocess
-import deep_learning_marcanthia.SCRIPTS.segmentation.semantic_model_testing as sem_model
+# import deep_learning_marcanthia.SCRIPTS.segmentation.semantic_model_testing as sem_model
 
 
 def _instance_norm(net):
@@ -401,14 +401,27 @@ def variance_map():
     #cv2.waitKey(0)
     #cv2.destroyAllWindows()
 
+
+def get_pic_var(pic):
+    return np.var(pic.flatten())
+
+def compare_img_noises(img1, img2, img3):
+    var1, var2, var3 = get_pic_var(img1), get_pic_var(img2), get_pic_var(img3)
+    print(var1, var2, var3, var3 / var1)
 if __name__ == "__main__":
     path = 'checkpoints/cycle_loss_scratch_contd/logs/3-11-20-12-59.txt'  #the good one
+
+    pic1 = cv2.imread('checkpoints/cycle_loss_scratch_contd_4/images/test_image_noise.png')[:, :, 0]
+    pic2 = cv2.imread('checkpoints/cycle_loss_scratch_contd_4/images/test_image_orig.png')[:, :, 0]
+    pic3 = cv2.imread('checkpoints/cycle_loss_scratch_contd_4/images/image_at_epoch_0021.png')[:136, :136, 0]
+    compare_img_noises(pic1, pic2, pic3)
+
     # path = 'checkpoints/cycle_loss_scratch_contd_2/logs/3-12-19-39-24.txt'
     # a, b, c, d, e = plot_metrics(path)
     # #%%
     # plt.plot(e)
     # plt.show()
-    variance_map()
+    # variance_map()
 
 
 
