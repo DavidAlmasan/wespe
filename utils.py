@@ -1,20 +1,20 @@
 import time
-# import tensorflow as tf
+import tensorflow as tf
 import os
 from scipy import ndimage, misc
 import re
-# import imageio
+import imageio
 import matplotlib.pyplot as plt
 import numpy as np
 import numpy as np
 import scipy.stats as st
-# import tensorflow_datasets as tfds
+import tensorflow_datasets as tfds
 import cv2
 import shutil
 from sklearn.feature_extraction import image
 import matplotlib.pyplot as plt
 import subprocess
-# import deep_learning_marcanthia.SCRIPTS.segmentation.semantic_model_testing as sem_model
+import deep_learning_marcanthia.SCRIPTS.segmentation.semantic_model_testing as sem_model
 
 
 def _instance_norm(net):
