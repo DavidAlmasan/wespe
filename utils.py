@@ -409,19 +409,19 @@ def compare_img_noises(img1, img2, img3):
     var1, var2, var3 = get_pic_var(img1), get_pic_var(img2), get_pic_var(img3)
     print(var1, var2, var3, var3 / var1)
 if __name__ == "__main__":
-    path = 'checkpoints/cycle_loss_scratch_contd/logs/3-11-20-12-59.txt'  #the good one
+    #path = 'checkpoints/cycle_loss_scratch_contd/logs/3-11-20-12-59.txt'  #the good one
 
-    pic1 = cv2.imread('checkpoints/cycle_loss_scratch_contd_4/images/test_image_noise.png')[:, :, 0]
-    pic2 = cv2.imread('checkpoints/cycle_loss_scratch_contd_4/images/test_image_orig.png')[:, :, 0]
-    pic3 = cv2.imread('checkpoints/cycle_loss_scratch_contd_4/images/image_at_epoch_0021.png')[:136, :136, 0]
-    compare_img_noises(pic1, pic2, pic3)
+    #pic1 = cv2.imread('checkpoints/cycle_loss_scratch_contd_4/images/test_image_noise.png')[:, :, 0]
+    #pic2 = cv2.imread('checkpoints/cycle_loss_scratch_contd_4/images/test_image_orig.png')[:, :, 0]
+    #pic3 = cv2.imread('checkpoints/cycle_loss_scratch_contd_4/images/image_at_epoch_0021.png')[:136, :136, 0]
+    #compare_img_noises(pic1, pic2, pic3)
 
     # path = 'checkpoints/cycle_loss_scratch_contd_2/logs/3-12-19-39-24.txt'
     # a, b, c, d, e = plot_metrics(path)
     # #%%
     # plt.plot(e)
     # plt.show()
-    # variance_map()
+    variance_map()
 
 
 
